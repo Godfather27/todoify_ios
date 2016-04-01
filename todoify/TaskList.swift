@@ -15,54 +15,32 @@ class TaskList{
     var completedCallback : () -> Void = {};
     
     init(){
-//        let dataURL = NSBundle.mainBundle().URLForResource(
-//            "test", withExtension: "json")
-//        let data = NSData(contentsOfURL: dataURL!)
-//        let readObject = try? NSJSONSerialization.JSONObjectWithData(data!,
-//            options: NSJSONReadingOptions())
-//        let liste = readObject as! NSArray
-//        var locs = Array<Task>()
-//        
-//        for jsoneintrag in liste {
-//            // Die “init” Funktion der Klasse “Hundeeinrichtung” extrahiert die
-//            // Daten aus dem Dictionary
-//            locs.append(Task(json: jsoneintrag as! NSDictionary))
-//        }
-//        tasks = locs // locations ist property vom Singleton
-        
     }
     
     func fetchData() {
-        //        THIS IS THE urlRequest
+        var requests = Array<NSMutableURLRequest>()
+        var requestURL: NSURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/69/open.json")!
+        requests.append(NSMutableURLRequest(URL: requestURL))
+        requestURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/69/closed.json")!
+        requests.append(NSMutableURLRequest(URL: requestURL))
+        requestURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/69/archived.json")!
+        requests.append(NSMutableURLRequest(URL: requestURL))
         
-        let requestURL: NSURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/174/open.json")!
-        let urlRequest: NSMutableURLRequest = NSMutableURLRequest(URL: requestURL)
         let session = NSURLSession.sharedSession()
-        //var locs = Array<Task>()
-        
-        let task = session.dataTaskWithRequest(urlRequest){
-            
-            (data, response, error) -> Void in
-            
-            let readObject = try? NSJSONSerialization.JSONObjectWithData(data!,
-                                                                         options: NSJSONReadingOptions())
-            let liste = readObject as! NSArray
-            for jsoneintrag in liste {
-                // Die “init” Funktion der Klasse “Task” extrahiert die
-                // Daten aus dem Dictionary
-                self.tasks.append(Task(json: jsoneintrag as! NSDictionary))
+        for urlRequest in requests{
+            let task = session.dataTaskWithRequest(urlRequest){
+                (data, response, error) -> Void in
+                
+                let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
+                let liste = readObject as! NSArray
+                for jsoneintrag in liste {
+                    self.tasks.append(Task(json: jsoneintrag as! NSDictionary, type: urlRequest.URL!.absoluteString))
+                }
+                self.completedCallback();
             }
-            print(self.tasks)
-            self.completedCallback();
+        
+            task.resume()
         }
-        
-        task.resume()
-        
-        //sleep(5);
-        
-        //tasks = locs // locations ist property vom Singleton
-        print(tasks)
-        
     }
     
     func onLoaded(completion: () -> Void){

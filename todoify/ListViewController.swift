@@ -10,8 +10,9 @@ import UIKit
 
 class ListViewController: UITableViewController {
     
+    
     func testFn(sender: UIBarButtonItem) {
-        print("pressed");
+        print(sender);
     }
     
     override func viewDidLoad() {
@@ -21,11 +22,10 @@ class ListViewController: UITableViewController {
         
         self.navigationItem.rightBarButtonItem = infoButton;
         
+        self.tableView.rowHeight = 59 as CGFloat
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -51,20 +51,89 @@ class ListViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        print("Number rows \(TaskList.singleton.tasks.count)")
         return TaskList.singleton.tasks.count
     }
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("TaskCell", forIndexPath: indexPath) as! TaskTableCell
-
-        print("Number rows \(TaskList.singleton.tasks.count)")
-        print("Row \(indexPath.row) \(TaskList.singleton.tasks[indexPath.row].title)")
-
-        cell.titleLabel?.text = TaskList.singleton.tasks[indexPath.row].title
-        cell.dueLabel?.text = TaskList.singleton.tasks[indexPath.row].due
+        let cell = tableView.dequeueReusableCellWithIdentifier("TaskCell", forIndexPath: indexPath)
+        
+        
+        
+        // remove old objects from cell
+        for cellElements in cell.subviews {
+            cellElements.removeFromSuperview()
+        }
+        
+        // define UI constants
+        let standardColor = UIColor(red: (25/355), green: (152/355), blue: (220/355), alpha: (100/100))
+        let grayColor = UIColor(red: (250/355), green: (250/355), blue: (250/355), alpha: (250/100))
+        let statusboxWidth = 5 as CGFloat
+        let buttonSize = 30 as CGFloat
+        let padding = 10 as CGFloat
+        let buttonOuterBoundingSize = (buttonSize + padding)
+        let labelPadding = 15 as CGFloat
+        let labelHeight = 20 as CGFloat
+        let bottomBorderWidth = 1 as CGFloat
+        
+        // displays status of task (overdue, open, done/archived)
+        let statusBox = CALayer()
+        print(TaskList.singleton.tasks[indexPath.row].status)
+        if(TaskList.singleton.tasks[indexPath.row].status == "closed" || TaskList.singleton.tasks[indexPath.row].status == "archived"){
+            statusBox.borderColor = grayColor.CGColor
+        } else {
+            statusBox.borderColor = standardColor.CGColor
+        }
+        statusBox.frame = CGRect(x: 0, y: 0, width: statusboxWidth, height: cell.frame.size.height)
+        statusBox.borderWidth = statusboxWidth
+        
+        let bottomBorder = CALayer()
+        bottomBorder.borderColor = grayColor.CGColor
+        bottomBorder.frame = CGRect(x: labelPadding, y: cell.frame.size.height - bottomBorderWidth, width: cell.frame.size.width - labelPadding, height: bottomBorderWidth)
+        bottomBorder.borderWidth = bottomBorderWidth
+        
+        // shows title of task
+        let titleLabel = UILabel(frame: CGRectMake(labelPadding, padding,(cell.frame.size.width - (3 * buttonOuterBoundingSize + labelPadding + padding)), labelHeight))
+        titleLabel.textColor = UIColor.blackColor()
+        if(TaskList.singleton.tasks[indexPath.row].status == "archived"){
+            let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: TaskList.singleton.tasks[indexPath.row].title!)
+            attributeString.addAttribute(NSStrikethroughStyleAttributeName, value: 2, range: NSMakeRange(0, attributeString.length))
+            titleLabel.attributedText = attributeString
+        } else {
+            titleLabel.text = TaskList.singleton.tasks[indexPath.row].title
+        }
+        titleLabel.font = UIFont.systemFontOfSize(17.0)
+        
+        // shows duedate of task
+        let dueLabel = UILabel(frame: CGRectMake(labelPadding, padding + labelHeight,(cell.frame.size.width - (3 * buttonOuterBoundingSize + labelPadding + padding)), labelHeight))
+        dueLabel.text = TaskList.singleton.tasks[indexPath.row].due
+        dueLabel.textColor = UIColor.grayColor()
+        dueLabel.font = UIFont.systemFontOfSize(12.0)
+        
+        // Buttons for marking tasks as done, archived and viewing task details
+        let infoTask = UIButton(type: .Custom)
+        infoTask.setImage(UIImage(named: "detail_task.png"), forState: UIControlState.Normal)
+        infoTask.frame = CGRectMake((cell.frame.size.width - buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
+        infoTask.addTarget(self, action: #selector(ListViewController.testFn), forControlEvents: UIControlEvents.TouchDown)
+        
+        let archiveTask = UIButton(type: .Custom)
+        archiveTask.setImage(UIImage(named: "archive_task.png"), forState: UIControlState.Normal)
+        archiveTask.frame = CGRectMake((cell.frame.size.width - 2 * buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
+        archiveTask.addTarget(self, action: #selector(ListViewController.testFn), forControlEvents: UIControlEvents.TouchDown)
+        
+        let doneTask = UIButton(type: .Custom)
+        doneTask.setImage(UIImage(named: "check_task.png"), forState: UIControlState.Normal)
+        doneTask.frame = CGRectMake((cell.frame.size.width - 3 * buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
+        doneTask.addTarget(self, action: #selector(ListViewController.testFn), forControlEvents: UIControlEvents.TouchDown)
+        
+        // add views to cell
+        cell.layer.addSublayer(statusBox)
+        cell.layer.addSublayer(bottomBorder)
+        cell.addSubview(infoTask)
+        cell.addSubview(archiveTask)
+        cell.addSubview(doneTask)
+        cell.addSubview(titleLabel)
+        cell.addSubview(dueLabel)
         
         return cell
     }
