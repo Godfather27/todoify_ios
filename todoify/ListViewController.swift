@@ -10,13 +10,24 @@ import UIKit
 
 class ListViewController: UITableViewController {
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad();
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        TaskList.singleton.onLoaded(){
+            if(!NSThread.isMainThread()) {
+                self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
+            }
+            else {
+                self.tableView.reloadData();                
+            }
+        };
     }
     
     override func didReceiveMemoryWarning() {
@@ -31,13 +42,18 @@ class ListViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        print("Number rows \(TaskList.singleton.tasks.count)")
         return TaskList.singleton.tasks.count
     }
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("TaskCell", forIndexPath: indexPath) as! TaskTableCell
-        
+
+        print("Number rows \(TaskList.singleton.tasks.count)")
+        print("Row \(indexPath.row) \(TaskList.singleton.tasks[indexPath.row].title)")
+
         cell.titleLabel?.text = TaskList.singleton.tasks[indexPath.row].title
         cell.dueLabel?.text = TaskList.singleton.tasks[indexPath.row].due
         
