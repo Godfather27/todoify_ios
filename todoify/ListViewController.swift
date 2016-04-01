@@ -9,8 +9,17 @@
 import UIKit
 
 class ListViewController: UITableViewController {
+    
+    func testFn(sender: UIBarButtonItem) {
+        print("pressed");
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad();
+        
+        let infoButton = UIBarButtonItem(title: "Info", style: .Plain, target: self, action: #selector(ListViewController.testFn));
+        
+        self.navigationItem.rightBarButtonItem = infoButton;
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
