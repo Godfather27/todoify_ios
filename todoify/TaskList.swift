@@ -71,7 +71,7 @@ class TaskList{
             
             let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
             let element = readObject as! NSDictionary
-            self.tasks[self.getResentTask(taskId)].status = element.objectForKey("id") as? String
+            self.tasks[self.getResentTask(taskId)].status = element.objectForKey("status") as? String
             
             self.completedCallback()
         }
