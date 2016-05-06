@@ -24,7 +24,7 @@ class ImprintController: UIViewController, UIScrollViewDelegate {
         
         self.scrollView = UIScrollView()
         self.scrollView.delegate = self
-        self.scrollView.contentSize = CGSizeMake(self.view.frame.width, 3000)
+        self.scrollView.contentSize = CGSizeMake(self.view.frame.width, (3794 + 2*(imageSize + padding + textSize + labelPadding)))
         
         contributorsView = setContriubtorsView()
         legalTextView = setLegalTextView()
@@ -92,7 +92,7 @@ class ImprintController: UIViewController, UIScrollViewDelegate {
     }
     
     func setLegalTextView() -> UIView! {
-        let label1 = UILabel(frame: CGRectMake(10, 30, (scrollView.contentSize.width-20), CGFloat.max))
+        let label1 = UILabel(frame: CGRectMake(10, 0, (scrollView.contentSize.width-20), CGFloat.max))
         
         label1.numberOfLines = 0
         
@@ -102,10 +102,6 @@ class ImprintController: UIViewController, UIScrollViewDelegate {
             "Fachhochschule Salzburg\n" +
             "Campus Urstein Süd 1\n" +
             "A-5412 Puch/Salzburg\n" +
-            "\n" +
-            "Vertreten durch:\n" +
-            "\n" +
-            "[Vertreten durch: Name, Anschrift]\n" +
             "\n" +
             "Kontakt:\n" +
             "\n" +
@@ -151,6 +147,9 @@ class ImprintController: UIViewController, UIScrollViewDelegate {
         
         label1.sizeToFit()
         
+        print("height:")
+        print(label1.frame.size.height)
+        
         legalTextView.addSubview(label1)
         
         return legalTextView
@@ -161,7 +160,7 @@ class ImprintController: UIViewController, UIScrollViewDelegate {
         
         scrollView.frame = view.bounds
         contributorsView.frame = CGRectMake(0, 0, scrollView.contentSize.width, 2*(imageSize + padding + textSize + labelPadding))
-        legalTextView.frame = CGRectMake(0, 2*(imageSize + padding + textSize + labelPadding), scrollView.contentSize.width, 1000)
+        legalTextView.frame = CGRectMake(0, contributorsView.frame.size.height, scrollView.contentSize.width, 3794)
     }
 
     override func didReceiveMemoryWarning() {
