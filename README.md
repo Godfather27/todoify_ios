@@ -1,2 +1,2 @@
 # todoify_ios
-porting todoify webapp to iOS
+extending todoify webapp to iOS
