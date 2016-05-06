@@ -13,6 +13,7 @@ class ListViewController: UITableViewController {
     
     func testFn(sender: UIBarButtonItem) {
         print(sender);
+        navigationController!.pushViewController(storyboard!.instantiateViewControllerWithIdentifier("ImprintController") as UIViewController, animated: true)
     }
     
     override func viewDidLoad() {

@@ -10,8 +10,12 @@
 		96151E9C1CAF0400009FD8B3 /* detail_task.png in Resources */ = {isa = PBXBuildFile; fileRef = 96151E991CAF0400009FD8B3 /* detail_task.png */; };
 		96151E9D1CAF0400009FD8B3 /* archive_task.png in Resources */ = {isa = PBXBuildFile; fileRef = 96151E9A1CAF0400009FD8B3 /* archive_task.png */; };
 		96151E9E1CAF0400009FD8B3 /* check_task.png in Resources */ = {isa = PBXBuildFile; fileRef = 96151E9B1CAF0400009FD8B3 /* check_task.png */; };
+		966A5DBE1CDCD5CA0062B358 /* alex_thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 966A5DBA1CDCD5CA0062B358 /* alex_thumb.png */; };
+		966A5DBF1CDCD5CA0062B358 /* josef_thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 966A5DBB1CDCD5CA0062B358 /* josef_thumb.png */; };
+		966A5DC01CDCD5CA0062B358 /* pablo_thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 966A5DBC1CDCD5CA0062B358 /* pablo_thumb.png */; };
+		966A5DC11CDCD5CA0062B358 /* sebastian_thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 966A5DBD1CDCD5CA0062B358 /* sebastian_thumb.png */; };
 		969F0BFB1C88694400A16A11 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969F0BFA1C88694400A16A11 /* AppDelegate.swift */; };
-		969F0BFD1C88694400A16A11 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969F0BFC1C88694400A16A11 /* ViewController.swift */; };
+		969F0BFD1C88694400A16A11 /* ImprintController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969F0BFC1C88694400A16A11 /* ImprintController.swift */; };
 		969F0C001C88694400A16A11 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 969F0BFE1C88694400A16A11 /* Main.storyboard */; };
 		969F0C021C88694400A16A11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 969F0C011C88694400A16A11 /* Assets.xcassets */; };
 		969F0C051C88694400A16A11 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 969F0C031C88694400A16A11 /* LaunchScreen.storyboard */; };
@@ -24,9 +28,13 @@
 		96151E991CAF0400009FD8B3 /* detail_task.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = detail_task.png; sourceTree = "<group>"; };
 		96151E9A1CAF0400009FD8B3 /* archive_task.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = archive_task.png; sourceTree = "<group>"; };
 		96151E9B1CAF0400009FD8B3 /* check_task.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_task.png; sourceTree = "<group>"; };
+		966A5DBA1CDCD5CA0062B358 /* alex_thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alex_thumb.png; sourceTree = "<group>"; };
+		966A5DBB1CDCD5CA0062B358 /* josef_thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = josef_thumb.png; sourceTree = "<group>"; };
+		966A5DBC1CDCD5CA0062B358 /* pablo_thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pablo_thumb.png; sourceTree = "<group>"; };
+		966A5DBD1CDCD5CA0062B358 /* sebastian_thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sebastian_thumb.png; sourceTree = "<group>"; };
 		969F0BF71C88694400A16A11 /* todoify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = todoify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		969F0BFA1C88694400A16A11 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		969F0BFC1C88694400A16A11 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		969F0BFC1C88694400A16A11 /* ImprintController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImprintController.swift; sourceTree = "<group>"; };
 		969F0BFF1C88694400A16A11 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		969F0C011C88694400A16A11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		969F0C041C88694400A16A11 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -50,6 +58,10 @@
 		96151E961CAEF893009FD8B3 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				966A5DBA1CDCD5CA0062B358 /* alex_thumb.png */,
+				966A5DBB1CDCD5CA0062B358 /* josef_thumb.png */,
+				966A5DBC1CDCD5CA0062B358 /* pablo_thumb.png */,
+				966A5DBD1CDCD5CA0062B358 /* sebastian_thumb.png */,
 				96151E991CAF0400009FD8B3 /* detail_task.png */,
 				96151E9A1CAF0400009FD8B3 /* archive_task.png */,
 				96151E9B1CAF0400009FD8B3 /* check_task.png */,
@@ -77,11 +89,11 @@
 			isa = PBXGroup;
 			children = (
 				969F0BFA1C88694400A16A11 /* AppDelegate.swift */,
-				969F0BFC1C88694400A16A11 /* ViewController.swift */,
+				969F0BFC1C88694400A16A11 /* ImprintController.swift */,
+				96FE6D8B1CAC28790025EC7D /* ListViewController.swift */,
 				969F0BFE1C88694400A16A11 /* Main.storyboard */,
 				96FE6D951CAC34910025EC7D /* Task.swift */,
 				96FE6D8D1CAC29440025EC7D /* TaskList.swift */,
-				96FE6D8B1CAC28790025EC7D /* ListViewController.swift */,
 				969F0C011C88694400A16A11 /* Assets.xcassets */,
 				96151E961CAEF893009FD8B3 /* assets */,
 				969F0C031C88694400A16A11 /* LaunchScreen.storyboard */,
@@ -121,6 +133,7 @@
 				TargetAttributes = {
 					969F0BF61C88694400A16A11 = {
 						CreatedOnToolsVersion = 7.0.1;
+						DevelopmentTeam = 7SFS7V694P;
 					};
 				};
 			};
@@ -147,10 +160,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				966A5DBF1CDCD5CA0062B358 /* josef_thumb.png in Resources */,
 				969F0C051C88694400A16A11 /* LaunchScreen.storyboard in Resources */,
 				969F0C021C88694400A16A11 /* Assets.xcassets in Resources */,
+				966A5DC01CDCD5CA0062B358 /* pablo_thumb.png in Resources */,
+				966A5DBE1CDCD5CA0062B358 /* alex_thumb.png in Resources */,
 				96151E9D1CAF0400009FD8B3 /* archive_task.png in Resources */,
 				96151E9E1CAF0400009FD8B3 /* check_task.png in Resources */,
+				966A5DC11CDCD5CA0062B358 /* sebastian_thumb.png in Resources */,
 				969F0C001C88694400A16A11 /* Main.storyboard in Resources */,
 				96151E9C1CAF0400009FD8B3 /* detail_task.png in Resources */,
 			);
@@ -164,7 +181,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96FE6D8E1CAC29440025EC7D /* TaskList.swift in Sources */,
-				969F0BFD1C88694400A16A11 /* ViewController.swift in Sources */,
+				969F0BFD1C88694400A16A11 /* ImprintController.swift in Sources */,
 				96FE6D961CAC34910025EC7D /* Task.swift in Sources */,
 				969F0BFB1C88694400A16A11 /* AppDelegate.swift in Sources */,
 				96FE6D8C1CAC28790025EC7D /* ListViewController.swift in Sources */,
@@ -278,6 +295,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = todoify/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = at.multimediatechnology.mmt2014.Dundanz.todoify;
@@ -289,6 +307,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = todoify/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = at.multimediatechnology.mmt2014.Dundanz.todoify;
