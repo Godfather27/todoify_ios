@@ -19,11 +19,11 @@ class TaskList{
     
     func fetchData() {
         var requests = Array<NSMutableURLRequest>()
-        var requestURL: NSURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/69/open.json")!
+        var requestURL: NSURL = NSURL(string: "http://localhost:3000/api/628/open.json")!
         requests.append(NSMutableURLRequest(URL: requestURL))
-        requestURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/69/closed.json")!
+        requestURL = NSURL(string: "http://localhost:3000/api/628/closed.json")!
         requests.append(NSMutableURLRequest(URL: requestURL))
-        requestURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/69/archived.json")!
+        requestURL = NSURL(string: "http://localhost:3000/api/628/archived.json")!
         requests.append(NSMutableURLRequest(URL: requestURL))
         
         let session = NSURLSession.sharedSession()
@@ -36,7 +36,7 @@ class TaskList{
                 for jsoneintrag in liste {
                     self.tasks.append(Task(json: jsoneintrag as! NSDictionary, type: urlRequest.URL!.absoluteString))
                 }
-                self.completedCallback();
+                self.completedCallback()
             }
         
             task.resume()
@@ -55,26 +55,28 @@ class TaskList{
             print("archive \(taskId)")
         }
 
-//        var request : NSMutableURLRequest
-//        if (mode){
-//            request = NSMutableURLRequest(URL: NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/toggle")!)
-//        } else {
-//            request = NSMutableURLRequest(URL: NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/archive")!)
-//        }
-//        request.HTTPMethod = "POST"
-//        let postString = "user=\(userId)&task= \(taskId)"
-//        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
-//        let session = NSURLSession.sharedSession()
-//        
-//        let task = session.dataTaskWithRequest(request){
-//            (data, response, error) -> Void in
-//            
-//            let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
-//            let element = readObject as! NSDictionary
-//            self.tasks[self.getResentTask(taskId)].status = element.objectForKey("id") as? String
-//        }
-//        
-//        task.resume()
+        var request : NSMutableURLRequest
+        if (mode){
+            request = NSMutableURLRequest(URL: NSURL(string: "http://localhost:3000/api/toggle")!)
+        } else {
+            request = NSMutableURLRequest(URL: NSURL(string: "http://localhost:3000/api/archive")!)
+        }
+        request.HTTPMethod = "POST"
+        let postString = "user=628&task= \(taskId)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+        let session = NSURLSession.sharedSession()
+        
+        let task = session.dataTaskWithRequest(request){
+            (data, response, error) -> Void in
+            
+            let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
+            let element = readObject as! NSDictionary
+            self.tasks[self.getResentTask(taskId)].status = element.objectForKey("id") as? String
+            
+            self.completedCallback()
+        }
+        
+        task.resume()
     }
     
     func getResentTask(taskId : Int) -> Int{

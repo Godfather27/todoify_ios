@@ -33,7 +33,8 @@ class Task{
         participants = json.objectForKey("participants") as? String
         title = json.objectForKey("title") as? String
 
-        status = type[48 ..< (type.characters.count - 5)]
+        status = type[30 ..< (type.characters.count - 5)]
+        print(status)
         
         due = json.objectForKey("due") as? String
         due = (due! as NSString).substringToIndex(10)
