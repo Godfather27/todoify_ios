@@ -10,16 +10,25 @@ import UIKit
 
 class ListViewController: UITableViewController {
     
+    func checkTask(sender: UIBarButtonItem) {
+        TaskList.singleton.updateStatus(sender.tag, mode: true)
+    }
     
-    func testFn(sender: UIBarButtonItem) {
-        print(sender);
-        navigationController!.pushViewController(storyboard!.instantiateViewControllerWithIdentifier("ImprintController") as UIViewController, animated: true)
+    func archiveTask(sender: UIBarButtonItem) {
+        TaskList.singleton.updateStatus(sender.tag, mode: false)
+    }
+    
+    func showInfo(sender: UIBarButtonItem) {
+    }
+    
+    func navigateToImprint(sender: UIBarButtonItem) {
+    navigationController!.pushViewController(storyboard!.instantiateViewControllerWithIdentifier("ImprintController") as UIViewController, animated: true)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad();
         
-        let infoButton = UIBarButtonItem(title: "Info", style: .Plain, target: self, action: #selector(ListViewController.testFn));
+        let infoButton = UIBarButtonItem(title: "Info", style: .Plain, target: self, action: #selector(ListViewController.navigateToImprint));
         
         self.navigationItem.rightBarButtonItem = infoButton;
         
@@ -59,8 +68,6 @@ class ListViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("TaskCell", forIndexPath: indexPath)
         
-        
-        
         // remove old objects from cell
         for cellElements in cell.subviews {
             cellElements.removeFromSuperview()
@@ -79,7 +86,6 @@ class ListViewController: UITableViewController {
         
         // displays status of task (overdue, open, done/archived)
         let statusBox = CALayer()
-        print(TaskList.singleton.tasks[indexPath.row].status)
         if(TaskList.singleton.tasks[indexPath.row].status == "closed" || TaskList.singleton.tasks[indexPath.row].status == "archived"){
             statusBox.borderColor = grayColor.CGColor
         } else {
@@ -115,24 +121,27 @@ class ListViewController: UITableViewController {
         let infoTask = UIButton(type: .Custom)
         infoTask.setImage(UIImage(named: "detail_task.png"), forState: UIControlState.Normal)
         infoTask.frame = CGRectMake((cell.frame.size.width - buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
-        infoTask.addTarget(self, action: #selector(ListViewController.testFn), forControlEvents: UIControlEvents.TouchDown)
+        infoTask.tag = -1
+        infoTask.addTarget(self, action: #selector(ListViewController.showInfo), forControlEvents: UIControlEvents.TouchDown)
         
         let archiveTask = UIButton(type: .Custom)
         archiveTask.setImage(UIImage(named: "archive_task.png"), forState: UIControlState.Normal)
         archiveTask.frame = CGRectMake((cell.frame.size.width - 2 * buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
-        archiveTask.addTarget(self, action: #selector(ListViewController.testFn), forControlEvents: UIControlEvents.TouchDown)
+        archiveTask.tag = TaskList.singleton.tasks[indexPath.row].id!
+        archiveTask.addTarget(self, action: #selector(ListViewController.archiveTask), forControlEvents: UIControlEvents.TouchDown)
         
-        let doneTask = UIButton(type: .Custom)
-        doneTask.setImage(UIImage(named: "check_task.png"), forState: UIControlState.Normal)
-        doneTask.frame = CGRectMake((cell.frame.size.width - 3 * buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
-        doneTask.addTarget(self, action: #selector(ListViewController.testFn), forControlEvents: UIControlEvents.TouchDown)
+        let checkTask = UIButton(type: .Custom)
+        checkTask.setImage(UIImage(named: "check_task.png"), forState: UIControlState.Normal)
+        checkTask.frame = CGRectMake((cell.frame.size.width - 3 * buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
+        checkTask.tag = TaskList.singleton.tasks[indexPath.row].id!
+        checkTask.addTarget(self, action: #selector(ListViewController.checkTask), forControlEvents: UIControlEvents.TouchDown)
         
         // add views to cell
         cell.layer.addSublayer(statusBox)
         cell.layer.addSublayer(bottomBorder)
         cell.addSubview(infoTask)
         cell.addSubview(archiveTask)
-        cell.addSubview(doneTask)
+        cell.addSubview(checkTask)
         cell.addSubview(titleLabel)
         cell.addSubview(dueLabel)
         
@@ -178,9 +187,9 @@ class ListViewController: UITableViewController {
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        let dvc = segue.destinationViewController as! DetailViewController
-//        dvc.locationIndex = super.tableView.indexPathForCell( sender as!UITableViewCell)!.row
-//    }
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let dvc = segue.destinationViewController as! DetailViewController
+        dvc.locationIndex = super.tableView.indexPathForCell( sender as!UITableViewCell)!.row
+    }
 
 }

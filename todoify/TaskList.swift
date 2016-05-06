@@ -48,5 +48,43 @@ class TaskList{
         fetchData();
     }
     
+    func updateStatus(taskId : Int, mode : Bool){
+        if (mode){
+            print("toggle \(taskId)")
+        } else {
+            print("archive \(taskId)")
+        }
+
+//        var request : NSMutableURLRequest
+//        if (mode){
+//            request = NSMutableURLRequest(URL: NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/toggle")!)
+//        } else {
+//            request = NSMutableURLRequest(URL: NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/archive")!)
+//        }
+//        request.HTTPMethod = "POST"
+//        let postString = "user=\(userId)&task= \(taskId)"
+//        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+//        let session = NSURLSession.sharedSession()
+//        
+//        let task = session.dataTaskWithRequest(request){
+//            (data, response, error) -> Void in
+//            
+//            let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
+//            let element = readObject as! NSDictionary
+//            self.tasks[self.getResentTask(taskId)].status = element.objectForKey("id") as? String
+//        }
+//        
+//        task.resume()
+    }
+    
+    func getResentTask(taskId : Int) -> Int{
+        for i in 0...self.tasks.count{
+            if(self.tasks[i].id == taskId){
+                return i
+            }
+        }
+        return -1
+    }
+    
     
 }
