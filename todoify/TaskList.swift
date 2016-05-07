@@ -14,9 +14,13 @@ class TaskList{
     var tasks = Array<Task>()
     var completedCallback : () -> Void = {};
     let baseUrl = "https://mmp2-gabriel-huber.herokuapp.com/"
-    let user = User()
+    var user = User(apiToken: "foo")
     
     init(){
+    }
+    
+    func setUser(apiToken : String){
+        user = User(apiToken: apiToken)
     }
     
     func fetchData() {
@@ -51,12 +55,6 @@ class TaskList{
     }
     
     func updateStatus(taskId : Int, mode : Bool){
-        if (mode){
-            print("toggle \(taskId)")
-        } else {
-            print("archive \(taskId)")
-        }
-
         var request : NSMutableURLRequest
         if (mode){
             request = NSMutableURLRequest(URL: NSURL(string: "\(baseUrl)/api/toggle")!)

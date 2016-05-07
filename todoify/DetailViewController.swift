@@ -10,13 +10,20 @@ import UIKit
 import Foundation
 
 class DetailViewController: UITableViewController {
-    @IBOutlet var KategorieCell : UITableViewCell!
+    @IBOutlet var DetailCell : UITableViewCell!
     
     var locationIndex: Int = 0
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        KategorieCell.textLabel!.text = TaskList.singleton.tasks[locationIndex].title
+        let label = UILabel(frame: CGRectMake(0, 0, 300, 1000))
+        label.text = TaskList.singleton.tasks[locationIndex].description
+        label.center = CGPointMake(150, 500)
+        label.textAlignment = NSTextAlignment.Left
+        label.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        label.numberOfLines = 0
+        label.sizeToFit()
+        DetailCell.contentView.addSubview(label)
     }
 }

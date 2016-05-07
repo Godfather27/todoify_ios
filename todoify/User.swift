@@ -10,9 +10,9 @@ import Foundation
 
 
 class User{
-//    var token : String?
-      var token = "69"
-//    init(json : NSDictionary){
-//        token = json.objectForKey("token") as? String
-//    }
+    let token : String?
+    
+    init(apiToken : String){
+        token = apiToken
+    }
 }

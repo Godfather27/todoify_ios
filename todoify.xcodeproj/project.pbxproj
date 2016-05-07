@@ -15,6 +15,7 @@
 		966A5DC01CDCD5CA0062B358 /* pablo_thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 966A5DBC1CDCD5CA0062B358 /* pablo_thumb.png */; };
 		966A5DC11CDCD5CA0062B358 /* sebastian_thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 966A5DBD1CDCD5CA0062B358 /* sebastian_thumb.png */; };
 		966A5DC31CDD15570062B358 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966A5DC21CDD15570062B358 /* DetailViewController.swift */; };
+		9692C34B1CDE373500EDB2A2 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9692C34A1CDE373500EDB2A2 /* LoginController.swift */; };
 		969F0BFB1C88694400A16A11 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969F0BFA1C88694400A16A11 /* AppDelegate.swift */; };
 		969F0BFD1C88694400A16A11 /* ImprintController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969F0BFC1C88694400A16A11 /* ImprintController.swift */; };
 		969F0C001C88694400A16A11 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 969F0BFE1C88694400A16A11 /* Main.storyboard */; };
@@ -35,6 +36,7 @@
 		966A5DBC1CDCD5CA0062B358 /* pablo_thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pablo_thumb.png; sourceTree = "<group>"; };
 		966A5DBD1CDCD5CA0062B358 /* sebastian_thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sebastian_thumb.png; sourceTree = "<group>"; };
 		966A5DC21CDD15570062B358 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		9692C34A1CDE373500EDB2A2 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		969F0BF71C88694400A16A11 /* todoify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = todoify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		969F0BFA1C88694400A16A11 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		969F0BFC1C88694400A16A11 /* ImprintController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImprintController.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 		969F0BF91C88694400A16A11 /* todoify */ = {
 			isa = PBXGroup;
 			children = (
+				9692C34A1CDE373500EDB2A2 /* LoginController.swift */,
 				969F0BFA1C88694400A16A11 /* AppDelegate.swift */,
 				969F0BFC1C88694400A16A11 /* ImprintController.swift */,
 				96FE6D8B1CAC28790025EC7D /* ListViewController.swift */,
@@ -191,6 +194,7 @@
 				96FE6D961CAC34910025EC7D /* Task.swift in Sources */,
 				966A5DC31CDD15570062B358 /* DetailViewController.swift in Sources */,
 				969F0BFB1C88694400A16A11 /* AppDelegate.swift in Sources */,
+				9692C34B1CDE373500EDB2A2 /* LoginController.swift in Sources */,
 				96FE6D8C1CAC28790025EC7D /* ListViewController.swift in Sources */,
 				96CD401A1CDD35AD009CEDAA /* User.swift in Sources */,
 			);
