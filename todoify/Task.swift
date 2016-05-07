@@ -31,9 +31,14 @@ class Task{
         autor = json.objectForKey("autor") as? String
         participants = json.objectForKey("participants") as? String
         title = json.objectForKey("title") as? String
-
-        status = type[30 ..< (type.characters.count - 5)]
-        print(status)
+        
+        if(status?.containsString("open") != nil){
+            status = "open"
+        } else if (status?.containsString("closed") != nil){
+            status = "closed"
+        } else if(status?.containsString("archived") != nil){
+            status = "archived"
+        }
         
         due = json.objectForKey("due") as? String
         due = (due! as NSString).substringToIndex(10)

@@ -13,17 +13,19 @@ class TaskList{
     static let singleton = TaskList()
     var tasks = Array<Task>()
     var completedCallback : () -> Void = {};
+    let baseUrl = "https://mmp2-gabriel-huber.herokuapp.com/"
+    let user = User()
     
     init(){
     }
     
     func fetchData() {
         var requests = Array<NSMutableURLRequest>()
-        var requestURL: NSURL = NSURL(string: "http://localhost:3000/api/628/open.json")!
+        var requestURL: NSURL = NSURL(string: "\(baseUrl)/api/\(user.token)/open.json")!
         requests.append(NSMutableURLRequest(URL: requestURL))
-        requestURL = NSURL(string: "http://localhost:3000/api/628/closed.json")!
+        requestURL = NSURL(string: "\(baseUrl)/api/\(user.token)/closed.json")!
         requests.append(NSMutableURLRequest(URL: requestURL))
-        requestURL = NSURL(string: "http://localhost:3000/api/628/archived.json")!
+        requestURL = NSURL(string: "\(baseUrl)/api/\(user.token)/archived.json")!
         requests.append(NSMutableURLRequest(URL: requestURL))
         
         let session = NSURLSession.sharedSession()
@@ -57,12 +59,12 @@ class TaskList{
 
         var request : NSMutableURLRequest
         if (mode){
-            request = NSMutableURLRequest(URL: NSURL(string: "http://localhost:3000/api/toggle")!)
+            request = NSMutableURLRequest(URL: NSURL(string: "\(baseUrl)/api/toggle")!)
         } else {
-            request = NSMutableURLRequest(URL: NSURL(string: "http://localhost:3000/api/archive")!)
+            request = NSMutableURLRequest(URL: NSURL(string: "\(baseUrl)/api/archive")!)
         }
         request.HTTPMethod = "POST"
-        let postString = "user=628&task= \(taskId)"
+        let postString = "user=\(user.token)&task=\(taskId)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         let session = NSURLSession.sharedSession()
         
