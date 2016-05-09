@@ -8,16 +8,24 @@
 
 import UIKit
 
+extension UIButton {
+    public override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
+        let buttonSize = self.frame.size
+        let widthToAdd = (44-buttonSize.width > 0) ? 44-buttonSize.width : 0
+        let heightToAdd = (44-buttonSize.height > 0) ? 44-buttonSize.height : 0
+        let largerFrame = CGRect(x: 0-(widthToAdd/2), y: 0-(heightToAdd/2), width: buttonSize.width+widthToAdd, height: buttonSize.height+heightToAdd)
+        return (CGRectContainsPoint(largerFrame, point)) ? self : nil
+    }
+}
+
 class ListViewController: UITableViewController {
     
     func checkTask(sender: UIBarButtonItem){
         TaskList.singleton.onLoadedUpdate({
             if(!NSThread.isMainThread()) {
                 self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
-                print("bar")
             }
             else {
-                print("foo")
                 self.tableView.reloadData();
             }
             }, taskId: sender.tag, mode: true)
@@ -33,9 +41,6 @@ class ListViewController: UITableViewController {
                     self.tableView.reloadData();
                 }
             }, taskId: sender.tag, mode: false)
-    }
-    
-    func showInfo(sender: UIBarButtonItem) {
     }
     
     func navigateToImprint(sender: UIBarButtonItem) {
@@ -123,7 +128,7 @@ class ListViewController: UITableViewController {
         let standardColor = UIColor(red: (25/355), green: (152/355), blue: (220/355), alpha: (100/100))
         let grayColor = UIColor(red: (250/355), green: (250/355), blue: (250/355), alpha: (250/100))
         let statusboxWidth = 5 as CGFloat
-        let buttonSize = 40 as CGFloat
+        let buttonSize = 30 as CGFloat
         let padding = 10 as CGFloat
         let buttonOuterBoundingSize = (buttonSize + padding)
         let labelPadding = 15 as CGFloat
@@ -154,7 +159,7 @@ class ListViewController: UITableViewController {
         }
         
         // shows title of task
-        let titleLabel = UILabel(frame: CGRectMake(labelPadding, padding,(cell.frame.size.width - (3 * buttonOuterBoundingSize + labelPadding + padding)), labelHeight))
+        let titleLabel = UILabel(frame: CGRectMake(labelPadding, padding,(cell.frame.size.width - (2 * buttonOuterBoundingSize + labelPadding + padding)), labelHeight))
         titleLabel.textColor = UIColor.blackColor()
         if(TaskList.singleton.allTasks[indexPath.section][indexPath.row].status == "closed"){
             let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: TaskList.singleton.allTasks[indexPath.section][indexPath.row].title!)
@@ -166,35 +171,41 @@ class ListViewController: UITableViewController {
         titleLabel.font = UIFont.systemFontOfSize(17.0)
         
         // shows duedate of task
-        let dueLabel = UILabel(frame: CGRectMake(labelPadding, padding + labelHeight,(cell.frame.size.width - (3 * buttonOuterBoundingSize + labelPadding + padding)), labelHeight))
+        let dueLabel = UILabel(frame: CGRectMake(labelPadding, padding + labelHeight,(cell.frame.size.width - (2 * buttonOuterBoundingSize + labelPadding + padding)), labelHeight))
         dueLabel.text = TaskList.singleton.allTasks[indexPath.section][indexPath.row].due
         dueLabel.textColor = UIColor.grayColor()
         dueLabel.font = UIFont.systemFontOfSize(12.0)
         
         // Buttons for marking tasks as done, archived and viewing task details
-        let infoTask = UIButton(type: .Custom)
-        infoTask.setImage(UIImage(named: "detail_task.png"), forState: UIControlState.Normal)
-        infoTask.frame = CGRectMake((cell.frame.size.width - buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
-        infoTask.tag = -1
-        infoTask.addTarget(self, action: #selector(ListViewController.showInfo), forControlEvents: UIControlEvents.TouchDown)
-        
-        let archiveTask = UIButton(type: .Custom)
-        archiveTask.setImage(UIImage(named: "archive_task.png"), forState: UIControlState.Normal)
-        archiveTask.frame = CGRectMake((cell.frame.size.width - 2 * buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
-        archiveTask.tag = TaskList.singleton.allTasks[indexPath.section][indexPath.row].id!
-        archiveTask.addTarget(self, action: #selector(ListViewController.archiveTask), forControlEvents: UIControlEvents.TouchDown)
-        
+        if(TaskList.singleton.allTasks[indexPath.section][indexPath.row].status != "archived"){
+            let archiveTask = UIButton(type: .Custom)
+            if(TaskList.singleton.allTasks[indexPath.section][indexPath.row].status == "closed"){
+                archiveTask.setImage(UIImage(named: "archive_closed.png"), forState: UIControlState.Normal)
+            } else {
+                archiveTask.setImage(UIImage(named: "archive_task.png"), forState: UIControlState.Normal)
+            }
+            archiveTask.frame = CGRectMake((cell.frame.size.width - buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
+            archiveTask.tag = TaskList.singleton.allTasks[indexPath.section][indexPath.row].id!
+            archiveTask.addTarget(self, action: #selector(ListViewController.archiveTask), forControlEvents: UIControlEvents.TouchDown)
+            cell.addSubview(archiveTask)
+        }
         let checkTask = UIButton(type: .Custom)
-        checkTask.setImage(UIImage(named: "check_task.png"), forState: UIControlState.Normal)
-        checkTask.frame = CGRectMake((cell.frame.size.width - 3 * buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
+        if(TaskList.singleton.allTasks[indexPath.section][indexPath.row].status != "open"){
+            checkTask.setImage(UIImage(named: "redo.png"), forState: UIControlState.Normal)
+        } else {
+            checkTask.setImage(UIImage(named: "check_task.png"), forState: UIControlState.Normal)
+        }
+        if(TaskList.singleton.allTasks[indexPath.section][indexPath.row].status != "archived"){
+            checkTask.frame = CGRectMake((cell.frame.size.width - 2 * buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
+        } else {
+            checkTask.frame = CGRectMake((cell.frame.size.width - buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
+        }
         checkTask.tag = TaskList.singleton.allTasks[indexPath.section][indexPath.row].id!
         checkTask.addTarget(self, action: #selector(ListViewController.checkTask), forControlEvents: UIControlEvents.TouchDown)
         
         // add views to cell
         cell.layer.addSublayer(statusBox)
         cell.layer.addSublayer(bottomBorder)
-        cell.addSubview(infoTask)
-        cell.addSubview(archiveTask)
         cell.addSubview(checkTask)
         cell.addSubview(titleLabel)
         cell.addSubview(dueLabel)
