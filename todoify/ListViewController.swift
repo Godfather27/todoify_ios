@@ -10,20 +10,29 @@ import UIKit
 
 class ListViewController: UITableViewController {
     
-    func checkTask(sender: UIBarButtonItem) {
-        TaskList.singleton.updateStatus(sender.tag, mode: true)
-        TaskList.singleton.onLoadedData(){
+    func checkTask(sender: UIBarButtonItem){
+        TaskList.singleton.onLoadedUpdate({
             if(!NSThread.isMainThread()) {
                 self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
+                print("bar")
             }
             else {
+                print("foo")
                 self.tableView.reloadData();
             }
-        }
+            }, taskId: sender.tag, mode: true)
     }
     
     func archiveTask(sender: UIBarButtonItem) {
-        TaskList.singleton.updateStatus(sender.tag, mode: false)
+        TaskList.singleton.onLoadedUpdate(
+            {
+                if(!NSThread.isMainThread()) {
+                    self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
+                }
+                else {
+                    self.tableView.reloadData();
+                }
+            }, taskId: sender.tag, mode: false)
     }
     
     func showInfo(sender: UIBarButtonItem) {
@@ -34,7 +43,7 @@ class ListViewController: UITableViewController {
     }
     
     override func viewDidLoad() {
-        super.viewDidLoad();
+        super.viewDidLoad()
         self.navigationItem.setHidesBackButton(true, animated: true)
         
         let infoButton = UIBarButtonItem(title: "Info", style: .Plain, target: self, action: #selector(ListViewController.navigateToImprint));

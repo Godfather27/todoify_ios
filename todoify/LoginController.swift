@@ -35,7 +35,6 @@ class LoginController: UIViewController, UIWebViewDelegate {
     }
     
     func navigateToListView() -> Void {
-        TaskList.singleton.setUser()
         performSegueWithIdentifier("goToListView", sender: nil)
     }
     

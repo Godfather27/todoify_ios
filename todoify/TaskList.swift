@@ -14,6 +14,7 @@ class TaskList{
     var allTasks = Array(count: 3, repeatedValue: Array<Task>())
     var userCompletedCallback : () -> Void = {};
     var dataCompletedCallback : () -> Void = {};
+    var updateCompletedCallback : () -> Void = {}
     let baseUrl = "https://mmp2-gabriel-huber.herokuapp.com"
     var user : User!
     
@@ -86,11 +87,19 @@ class TaskList{
     
     func onLoadedUser(userCompletion: () -> Void){
         self.userCompletedCallback = userCompletion;
+        TaskList.singleton.setUser()
     }
     
     func onLoadedData(dataCompletion: () -> Void){
         self.dataCompletedCallback = dataCompletion;
         fetchData();
+    }
+    
+    func onLoadedUpdate(updateCompletion: () -> Void, taskId: Int, mode: Bool){
+        self.updateCompletedCallback = updateCompletion
+        print(taskId)
+        updateStatus(taskId, mode: mode)
+        
     }
     
     func updateStatus(taskId : Int, mode : Bool){
@@ -108,24 +117,28 @@ class TaskList{
         let task = session.dataTaskWithRequest(request){
             (data, response, error) -> Void in
             
-//            let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
-//            let element = readObject as! NSDictionary
-//            self.openTasks[self.getResentTask(taskId)].status = element.objectForKey("status") as? String
-            
-            self.dataCompletedCallback()
+            let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
+            let element = readObject as! NSDictionary
+            if(element["error"] == nil){
+                if(element["status"] != nil){
+                    let bla = self.allTasks[0][0].id
+                    print(bla)
+                }
+            }
+            self.updateCompletedCallback()
         }
         
         task.resume()
     }
     
-//    func getResentTask(taskId : Int) -> Int{
-//        for i in 0...self.openTasks.count{
-//            if(self.openTasks[i].id == taskId){
-//                return i
-//            }
-//        }
-//        return -1
-//    }
+    func getResentTask(section : Int, taskId : Int) -> Int{
+        for i in 0...self.allTasks[section].count{
+            if(self.allTasks[section][i].id == taskId){
+                return i
+            }
+        }
+        return -1
+    }
     
     
 }

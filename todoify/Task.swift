@@ -32,8 +32,6 @@ class Task{
         participants = json.objectForKey("participants") as? String
         title = json.objectForKey("title") as? String
         
-        print(taskStatus)
-        
         if(taskStatus.containsString("open")){
             status = "open"
         } else if (taskStatus.containsString("closed")){
