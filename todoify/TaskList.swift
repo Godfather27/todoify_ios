@@ -11,7 +11,7 @@ import UIKit
 
 class TaskList{
     static let singleton = TaskList()
-    var tasks = Array<Task>()
+    var allTasks = Array(count: 3, repeatedValue: Array<Task>())
     var userCompletedCallback : () -> Void = {};
     var dataCompletedCallback : () -> Void = {};
     let baseUrl = "https://mmp2-gabriel-huber.herokuapp.com"
@@ -49,6 +49,9 @@ class TaskList{
     }
     
     func fetchData() {
+        allTasks[0] = Array<Task>()
+        allTasks[1] = Array<Task>()
+        allTasks[2] = Array<Task>()
         var requests = Array<NSMutableURLRequest>()
         var requestURL = NSURL(string: "\(baseUrl)/api/\(user.token!)/open.json")!
 
@@ -57,9 +60,7 @@ class TaskList{
         requests.append(NSMutableURLRequest(URL: requestURL))
         requestURL = NSURL(string: "\(baseUrl)/api/\(user.token!)/archived.json")!
         requests.append(NSMutableURLRequest(URL: requestURL))
-        
-        TaskList.singleton.tasks = Array<Task>()
-        
+                
         let session = NSURLSession.sharedSession()
         for urlRequest in requests{
             let task = session.dataTaskWithRequest(urlRequest){
@@ -68,7 +69,13 @@ class TaskList{
                 let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
                 let liste = readObject as! NSArray
                 for jsoneintrag in liste {
-                    self.tasks.append(Task(json: jsoneintrag as! NSDictionary, taskStatus: urlRequest.URL!.absoluteString))
+                    if(urlRequest.URL!.absoluteString.containsString("open")){
+                        self.allTasks[0].append(Task(json: jsoneintrag as! NSDictionary, taskStatus: urlRequest.URL!.absoluteString))
+                    } else if(urlRequest.URL!.absoluteString.containsString("closed")){
+                        self.allTasks[1].append(Task(json: jsoneintrag as! NSDictionary, taskStatus: urlRequest.URL!.absoluteString))
+                    } else if(urlRequest.URL!.absoluteString.containsString("archived")){
+                        self.allTasks[2].append(Task(json: jsoneintrag as! NSDictionary, taskStatus: urlRequest.URL!.absoluteString))
+                    }
                 }
                 self.dataCompletedCallback()
             }
@@ -101,9 +108,9 @@ class TaskList{
         let task = session.dataTaskWithRequest(request){
             (data, response, error) -> Void in
             
-            let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
-            let element = readObject as! NSDictionary
-            self.tasks[self.getResentTask(taskId)].status = element.objectForKey("status") as? String
+//            let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
+//            let element = readObject as! NSDictionary
+//            self.openTasks[self.getResentTask(taskId)].status = element.objectForKey("status") as? String
             
             self.dataCompletedCallback()
         }
@@ -111,14 +118,14 @@ class TaskList{
         task.resume()
     }
     
-    func getResentTask(taskId : Int) -> Int{
-        for i in 0...self.tasks.count{
-            if(self.tasks[i].id == taskId){
-                return i
-            }
-        }
-        return -1
-    }
+//    func getResentTask(taskId : Int) -> Int{
+//        for i in 0...self.openTasks.count{
+//            if(self.openTasks[i].id == taskId){
+//                return i
+//            }
+//        }
+//        return -1
+//    }
     
     
 }

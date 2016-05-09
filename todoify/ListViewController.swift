@@ -12,6 +12,14 @@ class ListViewController: UITableViewController {
     
     func checkTask(sender: UIBarButtonItem) {
         TaskList.singleton.updateStatus(sender.tag, mode: true)
+        TaskList.singleton.onLoadedData(){
+            if(!NSThread.isMainThread()) {
+                self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
+            }
+            else {
+                self.tableView.reloadData();
+            }
+        }
     }
     
     func archiveTask(sender: UIBarButtonItem) {
@@ -73,17 +81,30 @@ class ListViewController: UITableViewController {
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return TaskList.singleton.allTasks.count
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return TaskList.singleton.tasks.count
+        return TaskList.singleton.allTasks[section].count
+    }
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 0:
+            return "open"
+        case 1:
+            return "closed"
+        case 2:
+            return "archived"
+        default:
+            return "magic"
+        }
     }
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("TaskCell", forIndexPath: indexPath)
-        
+            
         // remove old objects from cell
         for cellElements in cell.subviews {
             cellElements.removeFromSuperview()
@@ -98,11 +119,11 @@ class ListViewController: UITableViewController {
         let buttonOuterBoundingSize = (buttonSize + padding)
         let labelPadding = 15 as CGFloat
         let labelHeight = 20 as CGFloat
-        let bottomBorderWidth = 1 as CGFloat
+        let borderWidth = 1 as CGFloat
         
         // displays status of task (overdue, open, done/archived)
         let statusBox = CALayer()
-        if(TaskList.singleton.tasks[indexPath.row].status == "closed" || TaskList.singleton.tasks[indexPath.row].status == "archived"){
+        if(TaskList.singleton.allTasks[indexPath.section][indexPath.row].status == "closed" || TaskList.singleton.allTasks[indexPath.section][indexPath.row].status == "archived"){
             statusBox.borderColor = grayColor.CGColor
         } else {
             statusBox.borderColor = standardColor.CGColor
@@ -112,24 +133,32 @@ class ListViewController: UITableViewController {
         
         let bottomBorder = CALayer()
         bottomBorder.borderColor = grayColor.CGColor
-        bottomBorder.frame = CGRect(x: labelPadding, y: cell.frame.size.height - bottomBorderWidth, width: cell.frame.size.width - labelPadding, height: bottomBorderWidth)
-        bottomBorder.borderWidth = bottomBorderWidth
+        bottomBorder.frame = CGRect(x: labelPadding, y: cell.frame.size.height - borderWidth, width: cell.frame.size.width - labelPadding, height: borderWidth)
+        bottomBorder.borderWidth = borderWidth
+        
+        if(indexPath.row == 0){
+            let topBorder = CALayer()
+            topBorder.borderColor = grayColor.CGColor
+            topBorder.frame = CGRect(x: labelPadding, y: 0, width: cell.frame.size.width - labelPadding, height: borderWidth)
+            topBorder.borderWidth = borderWidth
+            cell.layer.addSublayer(topBorder)
+        }
         
         // shows title of task
         let titleLabel = UILabel(frame: CGRectMake(labelPadding, padding,(cell.frame.size.width - (3 * buttonOuterBoundingSize + labelPadding + padding)), labelHeight))
         titleLabel.textColor = UIColor.blackColor()
-        if(TaskList.singleton.tasks[indexPath.row].status == "closed"){
-            let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: TaskList.singleton.tasks[indexPath.row].title!)
+        if(TaskList.singleton.allTasks[indexPath.section][indexPath.row].status == "closed"){
+            let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: TaskList.singleton.allTasks[indexPath.section][indexPath.row].title!)
             attributeString.addAttribute(NSStrikethroughStyleAttributeName, value: 2, range: NSMakeRange(0, attributeString.length))
             titleLabel.attributedText = attributeString
         } else {
-            titleLabel.text = TaskList.singleton.tasks[indexPath.row].title
+            titleLabel.text = TaskList.singleton.allTasks[indexPath.section][indexPath.row].title
         }
         titleLabel.font = UIFont.systemFontOfSize(17.0)
         
         // shows duedate of task
         let dueLabel = UILabel(frame: CGRectMake(labelPadding, padding + labelHeight,(cell.frame.size.width - (3 * buttonOuterBoundingSize + labelPadding + padding)), labelHeight))
-        dueLabel.text = TaskList.singleton.tasks[indexPath.row].due
+        dueLabel.text = TaskList.singleton.allTasks[indexPath.section][indexPath.row].due
         dueLabel.textColor = UIColor.grayColor()
         dueLabel.font = UIFont.systemFontOfSize(12.0)
         
@@ -143,13 +172,13 @@ class ListViewController: UITableViewController {
         let archiveTask = UIButton(type: .Custom)
         archiveTask.setImage(UIImage(named: "archive_task.png"), forState: UIControlState.Normal)
         archiveTask.frame = CGRectMake((cell.frame.size.width - 2 * buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
-        archiveTask.tag = TaskList.singleton.tasks[indexPath.row].id!
+        archiveTask.tag = TaskList.singleton.allTasks[indexPath.section][indexPath.row].id!
         archiveTask.addTarget(self, action: #selector(ListViewController.archiveTask), forControlEvents: UIControlEvents.TouchDown)
         
         let checkTask = UIButton(type: .Custom)
         checkTask.setImage(UIImage(named: "check_task.png"), forState: UIControlState.Normal)
         checkTask.frame = CGRectMake((cell.frame.size.width - 3 * buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
-        checkTask.tag = TaskList.singleton.tasks[indexPath.row].id!
+        checkTask.tag = TaskList.singleton.allTasks[indexPath.section][indexPath.row].id!
         checkTask.addTarget(self, action: #selector(ListViewController.checkTask), forControlEvents: UIControlEvents.TouchDown)
         
         // add views to cell
@@ -206,6 +235,7 @@ class ListViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let dvc = segue.destinationViewController as! DetailViewController
         dvc.locationIndex = super.tableView.indexPathForCell( sender as!UITableViewCell)!.row
+        dvc.sectionIndex = super.tableView.indexPathForCell( sender as!UITableViewCell)!.section
     }
     
 }
