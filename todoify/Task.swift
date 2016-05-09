@@ -25,18 +25,20 @@ class Task{
     var title : String?
     var status : String?
     
-    init(json: NSDictionary, type: String){
+    init(json: NSDictionary, taskStatus: String){
         id = json.objectForKey("id") as? Int
         description = json.objectForKey("description") as? String
         autor = json.objectForKey("autor") as? String
         participants = json.objectForKey("participants") as? String
         title = json.objectForKey("title") as? String
         
-        if(status?.containsString("open") != nil){
+        print(taskStatus)
+        
+        if(taskStatus.containsString("open")){
             status = "open"
-        } else if (status?.containsString("closed") != nil){
+        } else if (taskStatus.containsString("closed")){
             status = "closed"
-        } else if(status?.containsString("archived") != nil){
+        } else if(taskStatus.containsString("archived")){
             status = "archived"
         }
         

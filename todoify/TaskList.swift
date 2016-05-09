@@ -49,16 +49,16 @@ class TaskList{
     }
     
     func fetchData() {
-        print("start fetching")
-        print(user.token)
         var requests = Array<NSMutableURLRequest>()
         var requestURL = NSURL(string: "\(baseUrl)/api/\(user.token!)/open.json")!
-        print("\(baseUrl)/api/\(user.token!)/open.json")
+
         requests.append(NSMutableURLRequest(URL: requestURL))
         requestURL = NSURL(string: "\(baseUrl)/api/\(user.token!)/closed.json")!
         requests.append(NSMutableURLRequest(URL: requestURL))
         requestURL = NSURL(string: "\(baseUrl)/api/\(user.token!)/archived.json")!
         requests.append(NSMutableURLRequest(URL: requestURL))
+        
+        TaskList.singleton.tasks = Array<Task>()
         
         let session = NSURLSession.sharedSession()
         for urlRequest in requests{
@@ -68,7 +68,7 @@ class TaskList{
                 let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
                 let liste = readObject as! NSArray
                 for jsoneintrag in liste {
-                    self.tasks.append(Task(json: jsoneintrag as! NSDictionary, type: urlRequest.URL!.absoluteString))
+                    self.tasks.append(Task(json: jsoneintrag as! NSDictionary, taskStatus: urlRequest.URL!.absoluteString))
                 }
                 self.dataCompletedCallback()
             }

@@ -93,7 +93,7 @@ class ListViewController: UITableViewController {
         let standardColor = UIColor(red: (25/355), green: (152/355), blue: (220/355), alpha: (100/100))
         let grayColor = UIColor(red: (250/355), green: (250/355), blue: (250/355), alpha: (250/100))
         let statusboxWidth = 5 as CGFloat
-        let buttonSize = 30 as CGFloat
+        let buttonSize = 40 as CGFloat
         let padding = 10 as CGFloat
         let buttonOuterBoundingSize = (buttonSize + padding)
         let labelPadding = 15 as CGFloat
@@ -118,7 +118,7 @@ class ListViewController: UITableViewController {
         // shows title of task
         let titleLabel = UILabel(frame: CGRectMake(labelPadding, padding,(cell.frame.size.width - (3 * buttonOuterBoundingSize + labelPadding + padding)), labelHeight))
         titleLabel.textColor = UIColor.blackColor()
-        if(TaskList.singleton.tasks[indexPath.row].status == "archived"){
+        if(TaskList.singleton.tasks[indexPath.row].status == "closed"){
             let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: TaskList.singleton.tasks[indexPath.row].title!)
             attributeString.addAttribute(NSStrikethroughStyleAttributeName, value: 2, range: NSMakeRange(0, attributeString.length))
             titleLabel.attributedText = attributeString
