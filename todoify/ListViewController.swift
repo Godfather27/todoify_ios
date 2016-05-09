@@ -22,11 +22,12 @@ class ListViewController: UITableViewController {
     }
     
     func navigateToImprint(sender: UIBarButtonItem) {
-    navigationController!.pushViewController(storyboard!.instantiateViewControllerWithIdentifier("ImprintController") as UIViewController, animated: true)
+        navigationController!.pushViewController(storyboard!.instantiateViewControllerWithIdentifier("ImprintController") as UIViewController, animated: true)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad();
+        self.navigationItem.setHidesBackButton(true, animated: true)
         
         let infoButton = UIBarButtonItem(title: "Info", style: .Plain, target: self, action: #selector(ListViewController.navigateToImprint));
         
@@ -39,14 +40,29 @@ class ListViewController: UITableViewController {
     }
     
     override func viewDidAppear(animated: Bool) {
-        TaskList.singleton.onLoaded(){
-            if(!NSThread.isMainThread()) {
-                self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if(defaults.stringForKey("token") == nil){
+            TaskList.singleton.onLoadedUser(){
+                TaskList.singleton.onLoadedData(){
+                    if(!NSThread.isMainThread()) {
+                        self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
+                    }
+                    else {
+                        self.tableView.reloadData();
+                    }
+                }
             }
-            else {
-                self.tableView.reloadData();                
+        } else {
+            TaskList.singleton.setUser()
+            TaskList.singleton.onLoadedData(){
+                if(!NSThread.isMainThread()) {
+                    self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
+                }
+                else {
+                    self.tableView.reloadData();
+                }
             }
-        };
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -150,39 +166,39 @@ class ListViewController: UITableViewController {
     
     
     /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-    // Return false if you do not want the specified item to be editable.
-    return true
-    }
-    */
+     // Override to support conditional editing of the table view.
+     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+     // Return false if you do not want the specified item to be editable.
+     return true
+     }
+     */
     
     /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-    if editingStyle == .Delete {
-    // Delete the row from the data source
-    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-    } else if editingStyle == .Insert {
-    // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }
-    }
-    */
+     // Override to support editing the table view.
+     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+     if editingStyle == .Delete {
+     // Delete the row from the data source
+     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+     } else if editingStyle == .Insert {
+     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+     }
+     }
+     */
     
     /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-    
-    }
-    */
+     // Override to support rearranging the table view.
+     override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+     
+     }
+     */
     
     /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-    // Return false if you do not want the item to be re-orderable.
-    return true
-    }
-    */
+     // Override to support conditional rearranging of the table view.
+     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+     // Return false if you do not want the item to be re-orderable.
+     return true
+     }
+     */
     
     // MARK: - Navigation
     
@@ -191,5 +207,5 @@ class ListViewController: UITableViewController {
         let dvc = segue.destinationViewController as! DetailViewController
         dvc.locationIndex = super.tableView.indexPathForCell( sender as!UITableViewCell)!.row
     }
-
+    
 }

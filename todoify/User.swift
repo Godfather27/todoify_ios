@@ -12,7 +12,8 @@ import Foundation
 class User{
     let token : String?
     
-    init(apiToken : String){
-        token = apiToken
+    init(){
+        let defaults = NSUserDefaults.standardUserDefaults()
+        token = defaults.stringForKey("token")
     }
 }

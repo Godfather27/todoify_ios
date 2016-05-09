@@ -12,24 +12,52 @@ import UIKit
 class TaskList{
     static let singleton = TaskList()
     var tasks = Array<Task>()
-    var completedCallback : () -> Void = {};
-    let baseUrl = "https://mmp2-gabriel-huber.herokuapp.com/"
-    var user = User(apiToken: "foo")
+    var userCompletedCallback : () -> Void = {};
+    var dataCompletedCallback : () -> Void = {};
+    let baseUrl = "https://mmp2-gabriel-huber.herokuapp.com"
+    var user : User!
     
     init(){
     }
     
-    func setUser(apiToken : String){
-        user = User(apiToken: apiToken)
+    func setUser(){
+        let defaults = NSUserDefaults.standardUserDefaults()
+        
+        if(( defaults.stringForKey("token")) == nil){
+            let myURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/gettoken")
+            let myURLRequest : NSURLRequest = NSURLRequest(URL: myURL!)
+            let session = NSURLSession.sharedSession()
+        
+            let task = session.dataTaskWithRequest(myURLRequest){
+                (data, response, error) -> Void in
+            
+                let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
+                let element = readObject as! NSDictionary
+            
+                defaults.setValue((element.objectForKey("api_token") as? String)!, forKey: "token")
+                defaults.synchronize()
+            
+                self.user = User()
+
+                self.userCompletedCallback()
+            }
+        
+            task.resume()
+        } else {
+            self.user = User()
+        }
     }
     
     func fetchData() {
+        print("start fetching")
+        print(user.token)
         var requests = Array<NSMutableURLRequest>()
-        var requestURL: NSURL = NSURL(string: "\(baseUrl)/api/\(user.token)/open.json")!
+        var requestURL = NSURL(string: "\(baseUrl)/api/\(user.token!)/open.json")!
+        print("\(baseUrl)/api/\(user.token!)/open.json")
         requests.append(NSMutableURLRequest(URL: requestURL))
-        requestURL = NSURL(string: "\(baseUrl)/api/\(user.token)/closed.json")!
+        requestURL = NSURL(string: "\(baseUrl)/api/\(user.token!)/closed.json")!
         requests.append(NSMutableURLRequest(URL: requestURL))
-        requestURL = NSURL(string: "\(baseUrl)/api/\(user.token)/archived.json")!
+        requestURL = NSURL(string: "\(baseUrl)/api/\(user.token!)/archived.json")!
         requests.append(NSMutableURLRequest(URL: requestURL))
         
         let session = NSURLSession.sharedSession()
@@ -42,15 +70,19 @@ class TaskList{
                 for jsoneintrag in liste {
                     self.tasks.append(Task(json: jsoneintrag as! NSDictionary, type: urlRequest.URL!.absoluteString))
                 }
-                self.completedCallback()
+                self.dataCompletedCallback()
             }
         
             task.resume()
         }
     }
     
-    func onLoaded(completion: () -> Void){
-        self.completedCallback = completion;
+    func onLoadedUser(userCompletion: () -> Void){
+        self.userCompletedCallback = userCompletion;
+    }
+    
+    func onLoadedData(dataCompletion: () -> Void){
+        self.dataCompletedCallback = dataCompletion;
         fetchData();
     }
     
@@ -62,7 +94,7 @@ class TaskList{
             request = NSMutableURLRequest(URL: NSURL(string: "\(baseUrl)/api/archive")!)
         }
         request.HTTPMethod = "POST"
-        let postString = "user=\(user.token)&task=\(taskId)"
+        let postString = "user=\(user.token!)&task=\(taskId)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         let session = NSURLSession.sharedSession()
         
@@ -73,7 +105,7 @@ class TaskList{
             let element = readObject as! NSDictionary
             self.tasks[self.getResentTask(taskId)].status = element.objectForKey("status") as? String
             
-            self.completedCallback()
+            self.dataCompletedCallback()
         }
         
         task.resume()

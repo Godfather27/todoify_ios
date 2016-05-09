@@ -4,23 +4,24 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
-        <!--Login Controller-->
+        <!--Authenticate-->
         <scene sceneID="GwI-JX-hoW">
             <objects>
-                <viewController id="cfN-vy-SS3" customClass="LoginController" customModule="todoify" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginController" id="cfN-vy-SS3" customClass="LoginController" customModule="todoify" customModuleProvider="target" sceneMemberID="viewController">
                     <webView key="view" contentMode="scaleToFill" id="jDv-tV-HQE">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
                     </webView>
-                    <navigationItem key="navigationItem" id="bxz-tM-Xbe"/>
+                    <navigationItem key="navigationItem" title="Authenticate" id="bxz-tM-Xbe"/>
                     <connections>
                         <outlet property="myWebView" destination="jDv-tV-HQE" id="7Oj-1P-5vJ"/>
+                        <segue destination="40E-PO-Bh1" kind="show" identifier="goToListView" id="Ud7-lF-f01"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tvf-Ns-Wc7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="639" y="-599"/>
+            <point key="canvasLocation" x="-127" y="144"/>
         </scene>
         <!--Tasks-->
         <scene sceneID="yPM-eJ-FxM">
@@ -49,10 +50,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Tasks" id="6k7-sr-l0v"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <segue destination="dQT-zG-mjU" kind="show" id="XrM-SH-tMV"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Dc-Ve-cKU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="605" y="153"/>
+            <point key="canvasLocation" x="605" y="144"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="f86-lf-fgw">
@@ -86,7 +91,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iZe-mV-n3E" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1281" y="153"/>
+            <point key="canvasLocation" x="1309" y="144"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Yba-Hg-Bq5">
@@ -102,23 +107,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kPj-h5-Lh9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-257" y="-580"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="7NU-e7-oaC">
-            <objects>
-                <navigationController id="mvk-Zz-vnG" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="arr-Qe-f5h">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="40E-PO-Bh1" kind="relationship" relationship="rootViewController" id="qD0-Pb-1c1"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="TwN-sP-o3o" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-281" y="172"/>
+            <point key="canvasLocation" x="-923" y="144"/>
         </scene>
         <!--Imprint Controller-->
         <scene sceneID="6i4-Fv-iY7">
@@ -136,7 +125,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2zw-Po-z9G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="605" y="853"/>
+            <point key="canvasLocation" x="605" y="981"/>
         </scene>
     </scenes>
     <color key="tintColor" red="0.0" green="0.55294117649999996" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>

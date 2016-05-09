@@ -13,6 +13,10 @@ class LoginController: UIViewController, UIWebViewDelegate {
     @IBOutlet var myWebView: UIWebView!
     
     override func viewDidLoad() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if(defaults.stringForKey("token") != nil){
+            navigateToListView()
+        }
         super.viewDidLoad()
         myWebView.delegate = self
         let myURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/")
@@ -26,21 +30,18 @@ class LoginController: UIViewController, UIWebViewDelegate {
     
     func webViewDidFinishLoad(webView: UIWebView){
         if(webView.request?.URL?.absoluteString == "https://mmp2-gabriel-huber.herokuapp.com/tasks"){
-            let myURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/gettoken")
-            let myURLRequest : NSURLRequest = NSURLRequest(URL: myURL!)
-            let session = NSURLSession.sharedSession()
-            
-            let task = session.dataTaskWithRequest(myURLRequest){
-                (data, response, error) -> Void in
-                
-                let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
-                let element = readObject as! NSDictionary
-                TaskList.singleton.setUser((element.objectForKey("api_token") as? String)!)
-            }
-            
-            task.resume()
-            
-            // NAVIGATE TO LIST VIEW CONTROLLER
+            navigateToListView()
         }
+    }
+    
+    func navigateToListView() -> Void {
+        TaskList.singleton.setUser()
+        performSegueWithIdentifier("goToListView", sender: nil)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem
     }
 }
