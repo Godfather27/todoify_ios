@@ -97,7 +97,6 @@ class TaskList{
     
     func onLoadedUpdate(updateCompletion: () -> Void, taskId: Int, mode: Bool){
         self.updateCompletedCallback = updateCompletion
-        print(taskId)
         updateStatus(taskId, mode: mode)
         
     }

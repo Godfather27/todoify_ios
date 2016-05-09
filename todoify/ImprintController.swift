@@ -28,9 +28,7 @@ class ImprintController: UIViewController, UIScrollViewDelegate {
         
         contributorsView = setContriubtorsView()
         legalTextView = setLegalTextView()
-        
-        print(legalTextView)
-        
+                
         self.title = "Impressum"
         
         scrollView.addSubview(contributorsView)
@@ -146,9 +144,6 @@ class ImprintController: UIViewController, UIScrollViewDelegate {
         "Verwendung der erfassten Informationen: Neben den oben erläuterten Verwendungszwecken werden die von Ihnen bereitgestellten Informationen gemäß den geltenden Google-Datenschutzbestimmungen genutzt. Google veröffentlicht möglicherweise zusammengefasste Statistiken über die +1-Aktivitäten der Nutzer bzw. gibt diese an Nutzer und Partner weiter, wie etwa Publisher, Inserenten oder verbundene Websites."
         
         label1.sizeToFit()
-        
-        print("height:")
-        print(label1.frame.size.height)
         
         legalTextView.addSubview(label1)
         
