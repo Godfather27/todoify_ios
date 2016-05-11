@@ -25,15 +25,15 @@ class ListViewController: UITableViewController {
         buttonOuterBoundingSize = (buttonSize + padding)
     }
     
-    func checkNetworkStatus()->Int{
+    func hasInternetConnection()->Bool{
         let status = Reach().connectionStatus()
         switch status {
         case .Unknown, .Offline:
-            return -1
+            return false
         case .Online(.WWAN):
-            return 1
+            return true
         case .Online(.WiFi):
-            return 1
+            return true
         }
     }
     
@@ -64,7 +64,7 @@ class ListViewController: UITableViewController {
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // if no internet connection create no table section
-        if(checkNetworkStatus() != 1){
+        if(hasInternetConnection() == false){
             return 0
         }
         return TaskList.singleton.allTasks.count
@@ -72,14 +72,14 @@ class ListViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // if no internet connection create no table row
-        if(checkNetworkStatus() != 1){
+        if(hasInternetConnection() == false){
             return 0
         }
         return TaskList.singleton.allTasks[section].count
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if(checkNetworkStatus() != 1){
+        if(hasInternetConnection() == false){
             return ""
         }
         switch section {
@@ -98,7 +98,7 @@ class ListViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("TaskCell", forIndexPath: indexPath)
         // if no internet connection return empty cell
-        if(checkNetworkStatus() != 1){
+        if(hasInternetConnection() == false){
             return cell
         }
         // remove old objects from cell
