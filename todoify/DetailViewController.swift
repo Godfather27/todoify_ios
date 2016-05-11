@@ -56,7 +56,21 @@ class DetailViewController: UITableViewController {
         DueLabel.center = CGPointMake(150, 10)
         
         ParticipatsLabel.text = TaskList.singleton.allTasks[sectionIndex][locationIndex].participants
-        
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if(indexPath.row != 1) {
+            return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+        }
 
+        return UITableViewAutomaticDimension;
+    }
+    
+    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if(indexPath.row != 1) {
+            return 0;//super.tableView(tableView, estimatedHeightForRowAtIndexPath: indexPath)
+        }
+        
+        return 120.0;
     }
 }

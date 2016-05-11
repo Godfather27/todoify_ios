@@ -17,6 +17,7 @@ class TaskList{
     var updateCompletedCallback : () -> Void = {}
     let baseUrl = "https://mmp2-gabriel-huber.herokuapp.com"
     var user : User!
+    let semaphore = dispatch_semaphore_create(1)
     
     init(){
     }
@@ -25,25 +26,34 @@ class TaskList{
         let defaults = NSUserDefaults.standardUserDefaults()
         
         if( defaults.stringForKey("token") == nil){
-            let myURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/gettoken")
-            let myURLRequest : NSURLRequest = NSURLRequest(URL: myURL!)
-            let session = NSURLSession.sharedSession()
+            let myURL1 = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/apitoken")
+            let myURLRequest1 : NSURLRequest = NSURLRequest(URL: myURL1!)
+            let session1 = NSURLSession.sharedSession()
             
-            let task = session.dataTaskWithRequest(myURLRequest){
+            let task1 = session1.dataTaskWithRequest(myURLRequest1){
                 (data, response, error) -> Void in
                 
-                let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
-                let element = readObject as! NSDictionary
+                let myURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/api/gettoken")
+                let myURLRequest : NSURLRequest = NSURLRequest(URL: myURL!)
+                let session = NSURLSession.sharedSession()
                 
-                defaults.setValue((element.objectForKey("api_token") as? String)!, forKey: "token")
-                defaults.synchronize()
-                
-                self.user = User()
-                
-                self.userCompletedCallback()
+                let task = session.dataTaskWithRequest(myURLRequest){
+                    (data, response, error) -> Void in
+                    
+                    let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
+                    let element = readObject as! NSDictionary
+                    
+                    defaults.setValue((element.objectForKey("api_token") as? String)!, forKey: "token")
+                    defaults.synchronize()
+                    
+                    self.user = User()
+                    
+                    self.userCompletedCallback()
+                }
+                task.resume()
             }
+            task1.resume()
             
-            task.resume()
         } else {
             self.user = User()
         }
@@ -113,29 +123,15 @@ class TaskList{
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         let session = NSURLSession.sharedSession()
         
+        // self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
+        
         let task = session.dataTaskWithRequest(request){
             (data, response, error) -> Void in
             
             let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
             let element = readObject as! NSDictionary
             if(element["status"] != nil){
-                let position = self.getResentTask(taskId)
-                switch element.objectForKey("status") as! String{
-                case "open":
-                    self.allTasks[position[0]][position[1]].status = "open"
-                    self.allTasks[0].append(self.allTasks[position[0]].removeAtIndex(position[1]))
-                    break
-                case "closed":
-                    self.allTasks[position[0]][position[1]].status = "closed"
-                    self.allTasks[1].append(self.allTasks[position[0]].removeAtIndex(position[1]))
-                    break
-                case "archived":
-                    self.allTasks[position[0]][position[1]].status = "archived"
-                    self.allTasks[2].append(self.allTasks[position[0]].removeAtIndex(position[1]))
-                    break
-                default:
-                    break
-                }
+                self.updateTasks(taskId, element: element)
             }
             self.updateCompletedCallback()
         }
@@ -143,11 +139,37 @@ class TaskList{
         task.resume()
     }
     
+    func updateTasks(taskId : Int, element : NSDictionary){
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+        let position = self.getResentTask(taskId)
+        switch element.objectForKey("status") as! String{
+        case "open":
+            self.allTasks[position[0]][position[1]].status = "open"
+            self.allTasks[0].append(self.allTasks[position[0]].removeAtIndex(position[1]))
+            break
+        case "closed":
+            self.allTasks[position[0]][position[1]].status = "closed"
+            self.allTasks[1].append(self.allTasks[position[0]].removeAtIndex(position[1]))
+            break
+        case "archived":
+            self.allTasks[position[0]][position[1]].status = "archived"
+            self.allTasks[2].append(self.allTasks[position[0]].removeAtIndex(position[1]))
+            break
+        default:
+            break
+        }
+        dispatch_semaphore_signal(semaphore)
+    }
+    
     func getResentTask(taskId : Int) -> Array<Int>{
-        for j in 0...self.allTasks.count-1{
-            for i in 0...self.allTasks[j].count-1{
-                if(self.allTasks[j][i].id == taskId){
-                    return [j,i]
+        print("arrays: \(self.allTasks.count)")
+        for i in 0...self.allTasks.count-1{
+            if(self.allTasks[i].count == 0){
+                continue
+            }
+            for j in 0...self.allTasks[i].count-1{
+                if(self.allTasks[i][j].id == taskId){
+                    return [i,j]
                 }
             }
         }
