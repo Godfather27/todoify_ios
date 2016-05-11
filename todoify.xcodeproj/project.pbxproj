@@ -27,7 +27,9 @@
 		96CD401A1CDD35AD009CEDAA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CD40191CDD35AD009CEDAA /* User.swift */; };
 		96ED406C1CE370EC00D7F6EE /* ExtUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ED406B1CE370EC00D7F6EE /* ExtUIButton.swift */; };
 		96ED406E1CE3711700D7F6EE /* ExtString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ED406D1CE3711700D7F6EE /* ExtString.swift */; };
-		96ED40731CE37E0F00D7F6EE /* CreateCellComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ED40721CE37E0F00D7F6EE /* CreateCellComponents.swift */; };
+		96ED40731CE37E0F00D7F6EE /* RenderHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ED40721CE37E0F00D7F6EE /* RenderHelper.swift */; };
+		96ED40781CE3812D00D7F6EE /* ButtonHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ED40771CE3812D00D7F6EE /* ButtonHelper.swift */; };
+		96ED407A1CE383CF00D7F6EE /* DataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ED40791CE383CF00D7F6EE /* DataHelper.swift */; };
 		96FE6D8C1CAC28790025EC7D /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE6D8B1CAC28790025EC7D /* ListViewController.swift */; };
 		96FE6D8E1CAC29440025EC7D /* TaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE6D8D1CAC29440025EC7D /* TaskList.swift */; };
 		96FE6D961CAC34910025EC7D /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE6D951CAC34910025EC7D /* Task.swift */; };
@@ -56,7 +58,9 @@
 		96CD40191CDD35AD009CEDAA /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		96ED406B1CE370EC00D7F6EE /* ExtUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtUIButton.swift; sourceTree = "<group>"; };
 		96ED406D1CE3711700D7F6EE /* ExtString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtString.swift; sourceTree = "<group>"; };
-		96ED40721CE37E0F00D7F6EE /* CreateCellComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateCellComponents.swift; sourceTree = "<group>"; };
+		96ED40721CE37E0F00D7F6EE /* RenderHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderHelper.swift; sourceTree = "<group>"; };
+		96ED40771CE3812D00D7F6EE /* ButtonHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonHelper.swift; sourceTree = "<group>"; };
+		96ED40791CE383CF00D7F6EE /* DataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataHelper.swift; sourceTree = "<group>"; };
 		96FE6D8B1CAC28790025EC7D /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		96FE6D8D1CAC29440025EC7D /* TaskList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskList.swift; sourceTree = "<group>"; };
 		96FE6D951CAC34910025EC7D /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -127,7 +131,6 @@
 			children = (
 				96ED406B1CE370EC00D7F6EE /* ExtUIButton.swift */,
 				96ED406D1CE3711700D7F6EE /* ExtString.swift */,
-				96ED40721CE37E0F00D7F6EE /* CreateCellComponents.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -145,12 +148,23 @@
 		96ED40711CE3717800D7F6EE /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				96ED40761CE3809C00D7F6EE /* ListViewControllerHelper */,
 				9692C34A1CDE373500EDB2A2 /* LoginController.swift */,
 				969F0BFC1C88694400A16A11 /* ImprintController.swift */,
 				96FE6D8B1CAC28790025EC7D /* ListViewController.swift */,
 				966A5DC21CDD15570062B358 /* DetailViewController.swift */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		96ED40761CE3809C00D7F6EE /* ListViewControllerHelper */ = {
+			isa = PBXGroup;
+			children = (
+				96ED40721CE37E0F00D7F6EE /* RenderHelper.swift */,
+				96ED40791CE383CF00D7F6EE /* DataHelper.swift */,
+				96ED40771CE3812D00D7F6EE /* ButtonHelper.swift */,
+			);
+			name = ListViewControllerHelper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,7 +250,8 @@
 				96FE6D8E1CAC29440025EC7D /* TaskList.swift in Sources */,
 				969F0BFD1C88694400A16A11 /* ImprintController.swift in Sources */,
 				96FE6D961CAC34910025EC7D /* Task.swift in Sources */,
-				96ED40731CE37E0F00D7F6EE /* CreateCellComponents.swift in Sources */,
+				96ED407A1CE383CF00D7F6EE /* DataHelper.swift in Sources */,
+				96ED40731CE37E0F00D7F6EE /* RenderHelper.swift in Sources */,
 				966A5DC31CDD15570062B358 /* DetailViewController.swift in Sources */,
 				96ED406C1CE370EC00D7F6EE /* ExtUIButton.swift in Sources */,
 				969F0BFB1C88694400A16A11 /* AppDelegate.swift in Sources */,
@@ -245,6 +260,7 @@
 				96FE6D8C1CAC28790025EC7D /* ListViewController.swift in Sources */,
 				96CD401A1CDD35AD009CEDAA /* User.swift in Sources */,
 				96ED406E1CE3711700D7F6EE /* ExtString.swift in Sources */,
+				96ED40781CE3812D00D7F6EE /* ButtonHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -85,7 +85,28 @@ extension ListViewController {
             checkTask.frame = CGRectMake((cell.frame.size.width - buttonOuterBoundingSize), cell.frame.size.height/2 - buttonSize/2, buttonSize, buttonSize)
         }
         checkTask.tag = TaskList.singleton.allTasks[indexPath.section][indexPath.row].id!
-        checkTask.addTarget(self, action: #selector(ListViewController.checkTask), forControlEvents: UIControlEvents.TouchDown)
+        checkTask.addTarget(self, action: #selector(ListViewController.toggleTask), forControlEvents: UIControlEvents.TouchDown)
         return checkTask
+    }
+    
+    func renderWarning(){
+        let refreshController = UIAlertController(title: "Connection Error", message: "Your device doesn't have access to the internet currently", preferredStyle: .Alert)
+        
+        let refreshAction = UIAlertAction(title: "Refresh", style: .Cancel) { (action) in
+            self.loadData()
+        }
+        
+        let settingsAction = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
+            let settingsUrl = NSURL(string: UIApplicationOpenSettingsURLString)
+            if let url = settingsUrl {
+                UIApplication.sharedApplication().openURL(url)
+            }
+        }
+        
+        refreshController.addAction(refreshAction)
+        refreshController.addAction(settingsAction)
+        self.presentViewController(refreshController, animated: true) {
+            // ...
+        }
     }
 }

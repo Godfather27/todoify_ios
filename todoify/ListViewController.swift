@@ -25,37 +25,6 @@ class ListViewController: UITableViewController {
         buttonOuterBoundingSize = (buttonSize + padding)
     }
     
-    func checkTask(sender: UIBarButtonItem){
-        if(checkNetworkStatus() == 1){
-            TaskList.singleton.onLoadedUpdate({
-                if(!NSThread.isMainThread()) {
-                    self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
-                }
-                else {
-                    self.tableView.reloadData();
-                }
-                }, taskId: sender.tag, mode: true)
-        }
-    }
-    
-    func archiveTask(sender: UIBarButtonItem) {
-        if(checkNetworkStatus() == 1){
-            TaskList.singleton.onLoadedUpdate(
-                {
-                    if(!NSThread.isMainThread()) {
-                        self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
-                    }
-                    else {
-                        self.tableView.reloadData();
-                    }
-                }, taskId: sender.tag, mode: false)
-        }
-    }
-    
-    func navigateToImprint(sender: UIBarButtonItem) {
-        performSegueWithIdentifier("showImprint", sender: sender)
-    }
-    
     func checkNetworkStatus()->Int{
         let status = Reach().connectionStatus()
         switch status {
@@ -65,34 +34,6 @@ class ListViewController: UITableViewController {
             return 1
         case .Online(.WiFi):
             return 1
-        }
-    }
-    
-    func logoutCompleted() {
-        self.performSegueWithIdentifier("logout", sender: nil)
-    }
-    
-    func logout(){
-        let alertController = UIAlertController(title: "Logout", message: "Are you sure you want to log out?", preferredStyle: .Alert)
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
-            return
-        }
-        alertController.addAction(cancelAction)
-        
-        let LogoutAction = UIAlertAction(title: "Logout", style: .Default) { (action) in
-            NSUserDefaults.standardUserDefaults().setValue(nil, forKey: "token")
-            NSUserDefaults.standardUserDefaults().synchronize()
-            TaskList.singleton.user = nil
-            NSURLSession.sharedSession().resetWithCompletionHandler({
-                self.performSelectorOnMainThread(#selector(ListViewController.logoutCompleted), withObject: nil, waitUntilDone: false)
-            })
-            
-        }
-        alertController.addAction(LogoutAction)
-        
-        self.presentViewController(alertController, animated: true) {
-            // ...
         }
     }
     
@@ -114,57 +55,6 @@ class ListViewController: UITableViewController {
         loadData()
     }
     
-    func loadData(){
-        if(checkNetworkStatus() == 1){
-            let defaults = NSUserDefaults.standardUserDefaults()
-            if(defaults.stringForKey("token") == nil){
-                TaskList.singleton.onLoadedUser(){
-                    TaskList.singleton.onLoadedData(){
-                        if(!NSThread.isMainThread()) {
-                            self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
-                        }
-                        else {
-                            self.tableView.reloadData();
-                        }
-                    }
-                }
-            } else {
-                TaskList.singleton.setUser()
-                TaskList.singleton.onLoadedData(){
-                    if(!NSThread.isMainThread()) {
-                        self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
-                    }
-                    else {
-                        self.tableView.reloadData();
-                    }
-                }
-            }
-        } else {
-            renderWarning()
-        }
-    }
-    
-    func renderWarning(){
-        let refreshController = UIAlertController(title: "Connection Error", message: "Your device doesn't have access to the internet currently", preferredStyle: .Alert)
-        
-        let refreshAction = UIAlertAction(title: "Refresh", style: .Cancel) { (action) in
-            self.loadData()
-        }
-        
-        let settingsAction = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
-            let settingsUrl = NSURL(string: UIApplicationOpenSettingsURLString)
-            if let url = settingsUrl {
-                UIApplication.sharedApplication().openURL(url)
-            }
-        }
-
-        refreshController.addAction(refreshAction)
-        refreshController.addAction(settingsAction)
-        self.presentViewController(refreshController, animated: true) {
-            // ...
-        }
-    }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -173,6 +63,7 @@ class ListViewController: UITableViewController {
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        // if no internet connection create no table section
         if(checkNetworkStatus() != 1){
             return 0
         }
@@ -180,6 +71,7 @@ class ListViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // if no internet connection create no table row
         if(checkNetworkStatus() != 1){
             return 0
         }
@@ -198,14 +90,14 @@ class ListViewController: UITableViewController {
         case 2:
             return "archived"
         default:
-            return "magic"
+            return "failure"
         }
     }
     
     // Helper functions in CreateCellComponents.swift
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("TaskCell", forIndexPath: indexPath)
-        
+        // if no internet connection return empty cell
         if(checkNetworkStatus() != 1){
             return cell
         }
@@ -214,24 +106,17 @@ class ListViewController: UITableViewController {
             cellElements.removeFromSuperview()
         }
         
-        // displays status of task (overdue, open, done/archived)
         let statusBox = createStatusBox(cell, indexPath: indexPath)
-        
         let bottomBorder = createBottomBorder(cell)
-        
+        // Add top border to first cell per section
         if(indexPath.row == 0){
             let topBorder = createTopBorder(cell)
             cell.layer.addSublayer(topBorder)
         }
-        
-        // shows title of task
         let titleLabel = createTitleLabel(cell, indexPath: indexPath)
-        
-        // shows duedate of task
         let dueLabel = createDueLabel(cell, indexPath: indexPath)
-        
-        // Buttons for marking tasks as done, archived and viewing task details
-        if(TaskList.singleton.allTasks[indexPath.section][indexPath.row].status != "archived"){
+        // Archive Button only for open and done Tasks
+        if(indexPath.section != 2){
             let archiveTask = createArchiveTask(cell, indexPath: indexPath)
             cell.addSubview(archiveTask)
         }
