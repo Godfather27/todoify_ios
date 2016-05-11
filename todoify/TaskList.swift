@@ -162,7 +162,6 @@ class TaskList{
     }
     
     func getResentTask(taskId : Int) -> Array<Int>{
-        print("arrays: \(self.allTasks.count)")
         for i in 0...self.allTasks.count-1{
             if(self.allTasks[i].count == 0){
                 continue
