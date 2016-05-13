@@ -99,6 +99,17 @@ public class Reach {
         SCNetworkReachabilityScheduleWithRunLoop(reachability, CFRunLoopGetMain(), kCFRunLoopCommonModes)
     }
     
+    func hasInternetConnection()->Bool{
+        switch Reach().connectionStatus() {
+        case .Unknown, .Offline:
+            return false
+        case .Online(.WWAN):
+            return true
+        case .Online(.WiFi):
+            return true
+        }
+    }
+    
 }
 
 extension ReachabilityStatus {

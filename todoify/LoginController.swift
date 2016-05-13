@@ -17,9 +17,8 @@ class LoginController: UIViewController, UIWebViewDelegate {
     override func viewDidLoad() {
         self.navigationItem.setHidesBackButton(true, animated: true)
         
-        let status = checkNetworkStatus()
         let defaults = NSUserDefaults.standardUserDefaults()
-        if(defaults.stringForKey("token") != nil || status == -1){
+        if(defaults.stringForKey("token") != nil || Reach().hasInternetConnection()){
             navigateToListView()
         }
         super.viewDidLoad()
@@ -34,19 +33,15 @@ class LoginController: UIViewController, UIWebViewDelegate {
     }
     
     func webViewDidStartLoad(webView: UIWebView) {
-        if(webView.request?.URL?.absoluteString.containsString("google") == false){
-            loadingSpinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
-            loadingSpinner.startAnimating()
-            loadingSpinner.frame = CGRect(x: webView.frame.size.width/2-25, y: webView.frame.size.height/2-25, width: 50, height: 50)
-            webView.addSubview(loadingSpinner)
-        }
+        loadingSpinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+        loadingSpinner.startAnimating()
+        loadingSpinner.frame = CGRect(x: webView.frame.size.width/2-25, y: webView.frame.size.height/2-25, width: 50, height: 50)
+        webView.addSubview(loadingSpinner)
     }
     
     func webViewDidFinishLoad(webView: UIWebView){
-        if(webView.request?.URL?.absoluteString.containsString("google") == false){
-            loadingSpinner.stopAnimating()
-            loadingSpinner.removeFromSuperview()
-        }
+        loadingSpinner.stopAnimating()
+        loadingSpinner.removeFromSuperview()
         if(webView.request?.URL?.absoluteString == "https://mmp2-gabriel-huber.herokuapp.com/tasks"){
             navigateToListView()
         }
@@ -54,18 +49,6 @@ class LoginController: UIViewController, UIWebViewDelegate {
     
     func navigateToListView() -> Void {
         performSegueWithIdentifier("goToListView", sender: nil)
-    }
-    
-    func checkNetworkStatus()->Int{
-        let status = Reach().connectionStatus()
-        switch status {
-        case .Unknown, .Offline:
-            return -1
-        case .Online(.WWAN):
-            return 1
-        case .Online(.WiFi):
-            return 1
-        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

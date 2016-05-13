@@ -11,7 +11,7 @@ import UIKit
 extension ListViewController {
     // Toggles status of task and saves to server
     func toggleTask(sender: UIBarButtonItem){
-        if(hasInternetConnection() == true){
+        if(Reach().hasInternetConnection()){
             TaskList.singleton.onLoadedUpdate(
                 {
                     if(!NSThread.isMainThread()) {
@@ -26,7 +26,7 @@ extension ListViewController {
     
     // sets status of task to archived and saves to server
     func archiveTask(sender: UIBarButtonItem) {
-        if(hasInternetConnection() == true){
+        if(Reach().hasInternetConnection()){
             TaskList.singleton.onLoadedUpdate(
                 {
                     if(!NSThread.isMainThread()) {
