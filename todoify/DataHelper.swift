@@ -10,7 +10,7 @@ import UIKit
 
 extension ListViewController {
     func loadData(){
-        if(checkNetworkStatus() == 1){
+        if(hasInternetConnection() == true){
             setUserAndGetData()
         } else {
             // helper function in RenderHelper.swift
