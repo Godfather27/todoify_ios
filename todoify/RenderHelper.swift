@@ -44,6 +44,9 @@ extension ListViewController {
             let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: TaskList.singleton.allTasks[indexPath.section][indexPath.row].title!)
             attributeString.addAttribute(NSStrikethroughStyleAttributeName, value: 2, range: NSMakeRange(0, attributeString.length))
             titleLabel.attributedText = attributeString
+        } else if(TaskList.singleton.allTasks[indexPath.section][indexPath.row].status == "archived") {
+            titleLabel.textColor = grayColor
+            titleLabel.text = TaskList.singleton.allTasks[indexPath.section][indexPath.row].title
         } else {
             titleLabel.text = TaskList.singleton.allTasks[indexPath.section][indexPath.row].title
         }
