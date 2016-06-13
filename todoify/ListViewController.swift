@@ -83,7 +83,7 @@ class ListViewController: UITableViewController {
         case 2:
             return "archived"
         case 3:
-            return "calendars"
+            return "calendar manager"
         default:
             return "failure"
         }
@@ -101,10 +101,10 @@ class ListViewController: UITableViewController {
             cellElements.removeFromSuperview()
         }
         
+        // Calendar Manger Button
         if (indexPath.section == 3){
             let manageCalendarsButton = createGoToCalendarManagement(cell)
             cell.addSubview(manageCalendarsButton)
-            cell.textLabel?.text = "Test"
             return cell
         }
         

@@ -91,10 +91,10 @@ extension ListViewController {
     
     func createGoToCalendarManagement(cell: UITableViewCell) -> UIButton {
         let manageCalendarsButton = UIButton(frame: CGRect(x: 0, y: 0, width: 1000, height: 59))
-        manageCalendarsButton.setTitle("manage Calendars", forState: .Normal)
+        manageCalendarsButton.setTitle("select Calendars >", forState: .Normal)
         manageCalendarsButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
         manageCalendarsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
-        manageCalendarsButton.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+        manageCalendarsButton.contentEdgeInsets = UIEdgeInsetsMake(0, 20, 0, 0);
         manageCalendarsButton.addTarget(self, action: #selector(goToCalenendarManager), forControlEvents: UIControlEvents.TouchDown)
         return manageCalendarsButton
     }
