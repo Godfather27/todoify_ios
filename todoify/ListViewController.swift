@@ -42,6 +42,7 @@ class ListViewController: UITableViewController {
     }
     
     override func viewDidAppear(animated: Bool) {
+        // DataHelper.swift
         loadData()
     }
     
@@ -91,7 +92,7 @@ class ListViewController: UITableViewController {
         if(!Reach().hasInternetConnection()){
             return cell
         }
-        // remove old objects from cell
+        // remove old views from cell
         for cellElements in cell.subviews {
             cellElements.removeFromSuperview()
         }
@@ -124,13 +125,16 @@ class ListViewController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if(segue.identifier! == "showImprint"){
+            // no preperation needed for Imprint
             return
         } else if (segue.identifier! == "logout"){
+            // segue preperation for Logout
             let backItem = UIBarButtonItem()
             backItem.title = ""
             navigationItem.backBarButtonItem = backItem
             return
         }
+        // segue preperation for Detail View
         let dvc = segue.destinationViewController as! DetailViewController
         dvc.locationIndex = super.tableView.indexPathForCell( sender as!UITableViewCell)!.row
         dvc.sectionIndex = super.tableView.indexPathForCell( sender as!UITableViewCell)!.section

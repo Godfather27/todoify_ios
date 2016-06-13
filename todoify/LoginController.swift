@@ -17,10 +17,13 @@ class LoginController: UIViewController, UIWebViewDelegate {
     override func viewDidLoad() {
         self.navigationItem.setHidesBackButton(true, animated: true)
         
+        // skip login if already logged in
         let defaults = NSUserDefaults.standardUserDefaults()
         if(defaults.stringForKey("token") != nil && Reach().hasInternetConnection()){
             navigateToListView()
         }
+        
+        // continue with login procedure
         super.viewDidLoad()
         myWebView.delegate = self
         let myURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/ioslogin")
@@ -32,6 +35,7 @@ class LoginController: UIViewController, UIWebViewDelegate {
         super.didReceiveMemoryWarning()
     }
     
+    // show loading spinner while loading webpage
     func webViewDidStartLoad(webView: UIWebView) {
         loadingSpinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
         loadingSpinner.startAnimating()
@@ -39,6 +43,7 @@ class LoginController: UIViewController, UIWebViewDelegate {
         webView.addSubview(loadingSpinner)
     }
     
+    // hide loading spinner when loading has ended
     func webViewDidFinishLoad(webView: UIWebView){
         loadingSpinner.stopAnimating()
         loadingSpinner.removeFromSuperview()
@@ -51,6 +56,7 @@ class LoginController: UIViewController, UIWebViewDelegate {
         performSegueWithIdentifier("goToListView", sender: nil)
     }
     
+    // hide backbutton - prevent double login procedure
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let backItem = UIBarButtonItem()
         backItem.title = ""
