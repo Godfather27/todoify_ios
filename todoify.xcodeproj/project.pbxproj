@@ -24,6 +24,7 @@
 		969F0C021C88694400A16A11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 969F0C011C88694400A16A11 /* Assets.xcassets */; };
 		969F0C051C88694400A16A11 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 969F0C031C88694400A16A11 /* LaunchScreen.storyboard */; };
 		96A71A151CE1D6C000A9D0C9 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A71A141CE1D6C000A9D0C9 /* Reachability.swift */; };
+		96B726441D0F2FAD00C87FA7 /* MangerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B726431D0F2FAD00C87FA7 /* MangerController.swift */; };
 		96CD401A1CDD35AD009CEDAA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CD40191CDD35AD009CEDAA /* User.swift */; };
 		96ED406C1CE370EC00D7F6EE /* ExtUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ED406B1CE370EC00D7F6EE /* ExtUIButton.swift */; };
 		96ED406E1CE3711700D7F6EE /* ExtString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ED406D1CE3711700D7F6EE /* ExtString.swift */; };
@@ -55,6 +56,7 @@
 		969F0C041C88694400A16A11 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		969F0C061C88694400A16A11 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		96A71A141CE1D6C000A9D0C9 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		96B726431D0F2FAD00C87FA7 /* MangerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MangerController.swift; sourceTree = "<group>"; };
 		96CD40191CDD35AD009CEDAA /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		96ED406B1CE370EC00D7F6EE /* ExtUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtUIButton.swift; sourceTree = "<group>"; };
 		96ED406D1CE3711700D7F6EE /* ExtString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtString.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 			children = (
 				96ED40761CE3809C00D7F6EE /* ListViewControllerHelper */,
 				9692C34A1CDE373500EDB2A2 /* LoginController.swift */,
+				96B726431D0F2FAD00C87FA7 /* MangerController.swift */,
 				969F0BFC1C88694400A16A11 /* ImprintController.swift */,
 				96FE6D8B1CAC28790025EC7D /* ListViewController.swift */,
 				966A5DC21CDD15570062B358 /* DetailViewController.swift */,
@@ -247,6 +250,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96B726441D0F2FAD00C87FA7 /* MangerController.swift in Sources */,
 				96FE6D8E1CAC29440025EC7D /* TaskList.swift in Sources */,
 				969F0BFD1C88694400A16A11 /* ImprintController.swift in Sources */,
 				96FE6D961CAC34910025EC7D /* Task.swift in Sources */,

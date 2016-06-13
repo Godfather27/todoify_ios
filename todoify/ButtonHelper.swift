@@ -72,4 +72,9 @@ extension ListViewController {
         self.presentViewController(alertController, animated: true) {
         }
     }
+    
+    // navigates to manage Calendars
+    func goToCalenendarManager(sender: UIButton!) {
+        self.performSegueWithIdentifier("manager", sender: nil)
+    }
 }

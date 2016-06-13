@@ -58,13 +58,15 @@ class ListViewController: UITableViewController {
         if(!Reach().hasInternetConnection()){
             return 0
         }
-        return TaskList.singleton.allTasks.count
+        return TaskList.singleton.allTasks.count + 1
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // if no internet connection create no table row
         if(!Reach().hasInternetConnection()){
             return 0
+        } else if (section == 3) {
+            return 1
         }
         return TaskList.singleton.allTasks[section].count
     }
@@ -80,6 +82,8 @@ class ListViewController: UITableViewController {
             return "closed"
         case 2:
             return "archived"
+        case 3:
+            return "calendars"
         default:
             return "failure"
         }
@@ -97,8 +101,16 @@ class ListViewController: UITableViewController {
             cellElements.removeFromSuperview()
         }
         
+        if (indexPath.section == 3){
+            let manageCalendarsButton = createGoToCalendarManagement(cell)
+            cell.addSubview(manageCalendarsButton)
+            cell.textLabel?.text = "Test"
+            return cell
+        }
+        
         let statusBox = createStatusBox(cell, indexPath: indexPath)
         let bottomBorder = createBottomBorder(cell)
+        
         // Add top border to first cell per section
         if(indexPath.row == 0){
             let topBorder = createTopBorder(cell)
@@ -106,6 +118,7 @@ class ListViewController: UITableViewController {
         }
         let titleLabel = createTitleLabel(cell, indexPath: indexPath)
         let dueLabel = createDueLabel(cell, indexPath: indexPath)
+        
         // Archive Button only for open and done Tasks
         if(indexPath.section != 2){
             let archiveTask = createArchiveTask(cell, indexPath: indexPath)
@@ -132,6 +145,8 @@ class ListViewController: UITableViewController {
             let backItem = UIBarButtonItem()
             backItem.title = ""
             navigationItem.backBarButtonItem = backItem
+            return
+        } else if (segue.identifier! == "manager"){
             return
         }
         // segue preperation for Detail View

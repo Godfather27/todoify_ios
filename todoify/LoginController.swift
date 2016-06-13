@@ -19,6 +19,7 @@ class LoginController: UIViewController, UIWebViewDelegate {
         
         // skip login if already logged in
         let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.removeObjectForKey("token")
         if(defaults.stringForKey("token") != nil && Reach().hasInternetConnection()){
             navigateToListView()
         }

@@ -89,6 +89,16 @@ extension ListViewController {
         return checkTask
     }
     
+    func createGoToCalendarManagement(cell: UITableViewCell) -> UIButton {
+        let manageCalendarsButton = UIButton(frame: CGRect(x: 0, y: 0, width: 1000, height: 59))
+        manageCalendarsButton.setTitle("manage Calendars", forState: .Normal)
+        manageCalendarsButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        manageCalendarsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
+        manageCalendarsButton.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+        manageCalendarsButton.addTarget(self, action: #selector(goToCalenendarManager), forControlEvents: UIControlEvents.TouchDown)
+        return manageCalendarsButton
+    }
+    
     func renderWarning(){
         let refreshController = UIAlertController(title: "Connection Error", message: "Your device doesn't have access to the internet currently", preferredStyle: .Alert)
         
@@ -106,7 +116,6 @@ extension ListViewController {
         refreshController.addAction(refreshAction)
         refreshController.addAction(settingsAction)
         self.presentViewController(refreshController, animated: true) {
-            // ...
         }
     }
 }
