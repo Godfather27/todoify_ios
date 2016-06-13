@@ -18,7 +18,7 @@ class LoginController: UIViewController, UIWebViewDelegate {
         self.navigationItem.setHidesBackButton(true, animated: true)
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        if(defaults.stringForKey("token") != nil || Reach().hasInternetConnection()){
+        if(defaults.stringForKey("token") != nil && Reach().hasInternetConnection()){
             navigateToListView()
         }
         super.viewDidLoad()
