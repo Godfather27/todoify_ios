@@ -39,7 +39,6 @@ class MangerController: UIViewController, UIWebViewDelegate {
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         if (request.URL?.absoluteString.containsString("https://mmp2-gabriel-huber.herokuapp.com/sync/calendars") == true){
-            print(webView.request?.URL?.absoluteString.containsString("https://mmp2-gabriel-huber.herokuapp.com/sync/calendars"))
             performSegueWithIdentifier("returnToTasks", sender: nil)
         } else if(request.URL?.absoluteString.containsString("https://mmp2-gabriel-huber.herokuapp.com/tasks") == true){
             loadingSpinner.stopAnimating()
