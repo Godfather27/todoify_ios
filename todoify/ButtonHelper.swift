@@ -13,27 +13,49 @@ extension ListViewController {
     func toggleTask(sender: UIBarButtonItem){
         if(Reach().hasInternetConnection()){
             TaskList.singleton.onLoadedUpdate(
-                {
+                {(prev : Array<Int>) in
+                    var prev2 = prev
+                    if(prev[0] != 0){
+                        prev2.append(0)
+                    } else {
+                        prev2.append(1)
+                    }
                     if(!NSThread.isMainThread()) {
-                        self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
+                        self.performSelectorOnMainThread(#selector(ListViewController.updateTable), withObject: prev2, waitUntilDone: false)
                     }
                     else {
-                        self.tableView.reloadData();
+                        self.updateTable(prev2);
                     }
                 }, taskId: sender.tag, mode: true)
         }
     }
     
+    func updateTable(prev : Array<Int>) {
+        let indexPath1 = NSIndexPath(forRow: prev[1], inSection: prev[0])
+        let indexPath2 = NSIndexPath(forRow: TaskList.singleton.allTasks[prev[2]].count - 1, inSection: prev[2])
+        CATransaction.begin()
+        tableView.beginUpdates()
+        self.tableView.moveRowAtIndexPath(indexPath1, toIndexPath: indexPath2)
+        CATransaction.setCompletionBlock { () -> Void in
+            self.tableView.reloadRowsAtIndexPaths([indexPath2], withRowAnimation: UITableViewRowAnimation.Fade)
+        }
+        tableView.endUpdates()
+        CATransaction.commit()
+    }
+    
     // sets status of task to archived and saves to server
     func archiveTask(sender: UIBarButtonItem) {
         if(Reach().hasInternetConnection()){
+            
             TaskList.singleton.onLoadedUpdate(
-                {
+                {(prev : Array<Int>) in
+                    var prev2 = prev
+                    prev2.append(2)
                     if(!NSThread.isMainThread()) {
-                        self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
+                        self.performSelectorOnMainThread(#selector(ListViewController.updateTable), withObject: prev2, waitUntilDone: false)
                     }
                     else {
-                        self.tableView.reloadData();
+                        self.updateTable(prev2);
                     }
                 }, taskId: sender.tag, mode: false)
         }

@@ -14,7 +14,7 @@ class TaskList{
     var allTasks = Array(count: 3, repeatedValue: Array<Task>())
     var userCompletedCallback : () -> Void = {};
     var dataCompletedCallback : () -> Void = {};
-    var updateCompletedCallback : () -> Void = {}
+    var updateCompletedCallback : (prevSection : Array<Int>) -> Void = {_ in }
     let baseUrl = "https://mmp2-gabriel-huber.herokuapp.com"
     var user : User!
     let semaphore = dispatch_semaphore_create(1)
@@ -105,7 +105,7 @@ class TaskList{
         fetchData();
     }
     
-    func onLoadedUpdate(updateCompletion: () -> Void, taskId: Int, mode: Bool){
+    func onLoadedUpdate(updateCompletion: (prevSection : Array<Int>) -> Void, taskId: Int, mode: Bool){
         self.updateCompletedCallback = updateCompletion
         updateStatus(taskId, mode: mode)
         
@@ -123,23 +123,22 @@ class TaskList{
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         let session = NSURLSession.sharedSession()
         
-        // self.tableView.performSelectorOnMainThread(#selector(UITableView.reloadData), withObject: nil, waitUntilDone: false)
-        
         let task = session.dataTaskWithRequest(request){
             (data, response, error) -> Void in
             
+            var position = [Int]()
             let readObject = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())
             let element = readObject as! NSDictionary
             if(element["status"] != nil){
-                self.updateTasks(taskId, element: element)
+                position = self.updateTasks(taskId, element: element)
             }
-            self.updateCompletedCallback()
+            self.updateCompletedCallback(prevSection : position)
         }
         
         task.resume()
     }
     
-    func updateTasks(taskId : Int, element : NSDictionary){
+    func updateTasks(taskId : Int, element : NSDictionary) -> Array<Int>{
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
         let position = self.getResentTask(taskId)
         switch element.objectForKey("status") as! String{
@@ -159,6 +158,7 @@ class TaskList{
             break
         }
         dispatch_semaphore_signal(semaphore)
+        return position
     }
     
     func getResentTask(taskId : Int) -> Array<Int>{

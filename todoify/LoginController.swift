@@ -47,13 +47,22 @@ class LoginController: UIViewController, UIWebViewDelegate {
     func webViewDidFinishLoad(webView: UIWebView){
         loadingSpinner.stopAnimating()
         loadingSpinner.removeFromSuperview()
-        if(webView.request?.URL?.absoluteString == "https://mmp2-gabriel-huber.herokuapp.com/tasks"){
-            navigateToListView()
-        }
     }
     
     func navigateToListView() -> Void {
         performSegueWithIdentifier("goToListView", sender: nil)
+    }
+    
+    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        if(request.URL?.absoluteString.containsString("about:blank") == true) {
+            loadingSpinner.stopAnimating()
+            loadingSpinner.removeFromSuperview()
+        } else if(request.URL?.absoluteString.containsString("https://mmp2-gabriel-huber.herokuapp.com/tasks") == true){
+            loadingSpinner.stopAnimating()
+            loadingSpinner.removeFromSuperview()
+            navigateToListView()
+        }
+        return true
     }
     
     // hide backbutton - prevent double login procedure
