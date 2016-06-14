@@ -35,8 +35,19 @@ class MangerController: UIViewController, UIWebViewDelegate {
     func webViewDidFinishLoad(webView: UIWebView){
         loadingSpinner.stopAnimating()
         loadingSpinner.removeFromSuperview()
-        if(webView.request?.URL?.absoluteString != "https://mmp2-gabriel-huber.herokuapp.com/sync/ios_select"){
+    }
+    
+    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        if (request.URL?.absoluteString.containsString("https://mmp2-gabriel-huber.herokuapp.com/sync/calendars") == true){
+            print(webView.request?.URL?.absoluteString.containsString("https://mmp2-gabriel-huber.herokuapp.com/sync/calendars"))
             performSegueWithIdentifier("returnToTasks", sender: nil)
+        } else if(request.URL?.absoluteString.containsString("https://mmp2-gabriel-huber.herokuapp.com/tasks") == true){
+            loadingSpinner.stopAnimating()
+            loadingSpinner.removeFromSuperview()
+            let myURL = NSURL(string: "https://mmp2-gabriel-huber.herokuapp.com/sync/ios_select")
+            let myURLRequest : NSURLRequest = NSURLRequest(URL: myURL!)
+            myWebView.loadRequest(myURLRequest)
         }
+        return true
     }
 }
